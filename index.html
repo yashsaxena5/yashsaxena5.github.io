@@ -50,7 +50,7 @@
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: center; /* Center vertically for the typewriter part */
             padding: 2rem;
             color: var(--terminal-green);
             font-size: 16px;
@@ -72,12 +72,32 @@
             pointer-events: none;
         }
 
+        /* The Terminal Logs Container */
+        #terminal-log-container {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+        }
+
+        /* The Main Typewriter Text */
+        #typewriter-text {
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 50px;
+            z-index: 3;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
         .cursor {
             display: inline-block;
             width: 10px;
-            height: 18px;
+            height: 1.5rem;
             background: var(--terminal-green);
             animation: blink 1s infinite;
+            vertical-align: middle;
         }
 
         @keyframes blink {
@@ -335,8 +355,9 @@
 <body data-theme="dark">
 
     <div id="boot-screen">
-        <div id="terminal-text"></div>
-        <div>> <span class="cursor"></span></div>
+        <div id="typewriter-text"><span id="typed-content"></span><span class="cursor"></span></div>
+        
+        <div id="terminal-log-container"></div>
     </div>
 
     <header>
@@ -442,7 +463,7 @@
             <div class="timeline-item">
                 <div style="display:flex; align-items:center; margin-bottom:1rem;">
                     <a href="https://www.linkedin.com/company/fermilab/posts/?feedView=all" target="_blank">
-                        <img src="images/fermilab.jpeg" class="company-logo" alt="Fermilab" onerror="this.style.display='none'">
+                        <img src="images/fermilab_logo.jpeg" class="company-logo" alt="Fermilab" onerror="this.style.display='none'">
                     </a>
                     <div>
                         <strong>ASIC Engineer</strong> — <span style="color:var(--primary);">Fermilab</span><br>
@@ -519,6 +540,8 @@
 
     <script>
         // --- BOOT SEQUENCE SCRIPT ---
+        
+        // 1. Logs that appear at the bottom left
         const terminalText = [
             "Initializing Kernel...",
             "Loading VLSI Modules...",
@@ -527,32 +550,54 @@
             "Access Granted."
         ];
 
-        const textContainer = document.getElementById('terminal-text');
+        // 2. The funky message to type in the center
+        const typeWriterMessage = "Hello there, Hello World. You are entering the metaverse of chip designing.. The world you have never seen before.";
+
+        const logContainer = document.getElementById('terminal-log-container');
         const bootScreen = document.getElementById('boot-screen');
+        const typedContentSpan = document.getElementById('typed-content');
         let delay = 0;
 
-        // Create lines one by one
+        // PHASE 1: Terminal Logs
         terminalText.forEach((line, index) => {
             setTimeout(() => {
                 const p = document.createElement('div');
                 p.textContent = `> ${line}`;
-                textContainer.appendChild(p);
-                // Auto scroll to bottom
-                bootScreen.scrollTop = bootScreen.scrollHeight;
+                logContainer.appendChild(p);
             }, delay);
-            delay += 600; // Speed between lines
+            delay += 500; 
         });
 
-        // Remove boot screen after text finishes
+        // PHASE 2: Clear Logs & Start Typewriter
         setTimeout(() => {
-            bootScreen.style.opacity = '0';
-            setTimeout(() => {
-                bootScreen.style.display = 'none';
-            }, 500);
-        }, delay + 800);
+            // Clear the terminal logs
+            logContainer.style.display = 'none';
+            
+            // Start typing the message
+            let i = 0;
+            const typingSpeed = 50; // Speed of typing (ms)
+
+            function typeWriter() {
+                if (i < typeWriterMessage.length) {
+                    typedContentSpan.textContent += typeWriterMessage.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, typingSpeed);
+                } else {
+                    // PHASE 3: Finish & Reveal Site
+                    setTimeout(() => {
+                        bootScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            bootScreen.style.display = 'none';
+                        }, 500);
+                    }, 1500); // Wait 1.5s after typing finishes before fading out
+                }
+            }
+            typeWriter();
+
+        }, delay + 600);
+
 
         // --- SCROLL REVEAL SCRIPT ---
-        // This adds the "fade in" effect as you scroll down
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {

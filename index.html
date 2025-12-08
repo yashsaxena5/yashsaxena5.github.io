@@ -365,11 +365,31 @@
         <section>
             <h2>> Project_Logs</h2>
             <div class="grid-3">
-                <div class="card"><div class="card-title">SPI Memory UVM Verification</div><p>Full coverage-driven testbench with scoreboard & functional coverage.</p></div>
-                <div class="card"><div class="card-title">PUF & TRNG on SAR ADC</div><p>VLSID 2023 paper – 20% power reduction, NIST-certified randomness.</p></div>
-                <div class="card"><div class="card-title">MIPS Processor</div><p>Single & multi-cycle designs in Verilog with self-checking testbenches.</p></div>
-                <div class="card"><div class="card-title">Forest Fire CNN</div><p>93% accuracy, 2 ms inference on edge.</p></div>
-                <div class="card"><div class="card-title">45nm MAC Datapath</div><p>Transistor-level adders & multipliers in Cadence Virtuoso.</p></div>
+                <div class="card">
+                    <div class="card-title">SPI Memory Verification</div>
+                    <div class="card-subtitle">UVM • SystemVerilog</div>
+                    <p>Full UVM testbench with scoreboard, coverage-driven verification of a SPI flash controller.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">PUF & TRNG on SAR ADC</div>
+                    <div class="card-subtitle">VLSID 2023 Paper • Python</div>
+                    <p>Reduced power by 20%, passed NIST randomness tests.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">MIPS Processor (Single/Multi-cycle)</div>
+                    <div class="card-subtitle">Verilog • Quartus</div>
+                    <p>From ISA to synthesis — with self-checking testbenches.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">Forest Fire Detection CNN</div>
+                    <div class="card-subtitle">PyTorch • 93% acc</div>
+                    <p>Real-time inference latency: 2 ms on edge device.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">MAC Datapath in 45nm</div>
+                    <div class="card-subtitle">Cadence Virtuoso • Spectre</div>
+                    <p>Transistor-level design of adders & multipliers with corner analysis.</p>
+                </div>
             </div>
         </section>
 
@@ -422,7 +442,7 @@
         document.querySelectorAll('section').forEach(section => {
             observer.observe(section);
         });
-        
+
         // --- THEME TOGGLE SCRIPT ---
         const toggle = document.getElementById('themeToggle');
         const body = document.body;

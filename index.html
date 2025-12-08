@@ -14,6 +14,7 @@
             --primary: #66fcf1;
             --accent: #45a29e;
             --border: #45a29e;
+            --terminal-green: #0aff0a;
         }
 
         [data-theme="light"] {
@@ -24,29 +25,67 @@
             --primary: #00d4c4;
             --accent: #00b8a9;
             --border: #00d4c4;
+            --terminal-green: #006400;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             background: var(--bg);
             color: var(--text);
             font-family: 'Courier New', monospace;
             transition: background 0.4s, color 0.4s;
             line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
-        /* Profile photo - exactly like your original */
-        .profile-pic {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            border: 4px solid var(--primary);
-            object-fit: cover;
-            box-shadow: 0 0 25px rgba(102, 252, 241, 0.5);
-            transition: all 0.3s;
+        /* --- BOOT SCREEN STYLES (Restored) --- */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            color: var(--terminal-green);
+            font-size: 16px;
+            font-weight: bold;
         }
-        .profile-pic:hover { transform: scale(1.05); }
 
+        /* CRT Scanline Effect for extra "Hardware" feel */
+        #boot-screen::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background: var(--terminal-green);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* --- LAYOUT STYLES --- */
         header {
             padding: 2rem;
             border-bottom: 2px solid var(--border);
@@ -55,6 +94,7 @@
             backdrop-filter: blur(10px);
             background: rgba(11, 12, 16, 0.95);
             z-index: 100;
+            transition: background 0.4s;
         }
         [data-theme="light"] header { background: rgba(255,255,255,0.95); }
 
@@ -68,11 +108,22 @@
             gap: 2rem;
         }
 
+        .profile-pic {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            object-fit: cover;
+            box-shadow: 0 0 25px rgba(102, 252, 241, 0.5);
+            transition: all 0.3s;
+        }
+        .profile-pic:hover { transform: scale(1.05); }
+
         h1 {
             color: var(--primary);
             font-size: 2.2rem;
             letter-spacing: 2px;
-            text-shadow: 0 0 15px var(--primary);
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
         }
 
         .links a {
@@ -80,16 +131,27 @@
             margin-left: 1.5rem;
             text-decoration: none;
             font-weight: bold;
+            position: relative;
         }
-        .links a:hover { text-decoration: underline; }
+        .links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        .links a:hover::after { width: 100%; }
 
-        /* Theme toggle button */
+        /* Theme Toggle */
         .theme-toggle {
             padding: 10px 16px;
-            background: var(--card-bg);
+            background: transparent;
             border: 2px solid var(--primary);
             color: var(--primary);
-            border-radius: 50px;
+            border-radius: 5px;
             cursor: pointer;
             font-family: inherit;
             font-weight: bold;
@@ -98,9 +160,22 @@
         .theme-toggle:hover {
             background: var(--primary);
             color: #000;
+            box-shadow: 0 0 15px var(--primary);
         }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+
+        /* --- SCROLL ANIMATIONS (Dynamic Feel) --- */
+        section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+            margin-bottom: 5rem;
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         h2 {
             color: var(--primary);
@@ -114,54 +189,65 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
-            margin-bottom: 4rem;
         }
 
+        /* --- CARDS --- */
         .card {
             background: var(--card-bg);
             padding: 2rem;
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 4px; /* Slightly sharper edges for tech feel */
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 30px rgba(102, 252, 241, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(102, 252, 241, 0.15);
             border-color: var(--primary);
         }
+        /* Circuit Trace Effect */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transition: 0.5s;
+        }
+        .card:hover::before { left: 0; }
 
-        /* Slideshow placeholder */
         .slideshow {
             width: 100%;
             height: 380px;
             background: var(--card-bg);
             border: 2px dashed var(--accent);
-            border-radius: 12px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--text-muted);
-            font-size: 1.1rem;
             text-align: center;
             padding: 2rem;
-            background-image: url('images/chip-placeholder.jpg');
-            background-size: cover;
-            background-position: center;
         }
 
         .skill-tag {
             display: inline-block;
-            background: rgba(102,252,241,0.1);
+            background: rgba(102,252,241,0.05);
             color: var(--primary);
             border: 1px solid var(--primary);
             padding: 6px 12px;
             margin: 5px 8px 5px 0;
-            border-radius: 30px;
+            border-radius: 2px;
             font-size: 0.9rem;
+            transition: 0.2s;
         }
         .skill-tag:hover {
             background: var(--primary);
             color: #000;
+            cursor: crosshair;
         }
 
         .timeline-item {
@@ -174,38 +260,55 @@
             position: absolute;
             left: 0;
             top: 8px;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             background: var(--bg);
-            border: 3px solid var(--primary);
+            border: 2px solid var(--primary);
             border-radius: 50%;
             box-shadow: 0 0 10px var(--primary);
+            z-index: 2;
         }
         .timeline-item::after {
             content: '';
             position: absolute;
-            left: 6px;
+            left: 5px;
             top: 24px;
-            bottom: -2rem;
+            bottom: -2.5rem;
             width: 2px;
             background: var(--accent);
-            opacity: 0.4;
+            opacity: 0.3;
         }
         .timeline-item:last-child::after { display: none; }
 
         .company-logo {
             width: 50px;
             height: 50px;
-            padding: 6px;
+            padding: 5px;
             background: white;
-            border-radius: 10px;
+            border-radius: 8px;
             margin-right: 15px;
+            object-fit: contain;
         }
 
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
+        }
+
+        .card-title {
+            color: #fff; /* Always white in dark mode */
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        [data-theme="light"] .card-title { color: #000; }
+
+        .card-subtitle {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
         }
 
         footer {
@@ -219,26 +322,34 @@
             .grid-2 { grid-template-columns: 1fr; }
             .header-content { flex-direction: column; text-align: center; }
             h1 { font-size: 2rem; }
+            .links { margin: 1rem 0; }
+            .links a { margin: 0 10px; }
         }
     </style>
 </head>
 <body data-theme="dark">
 
+    <div id="boot-screen">
+        <div id="terminal-text"></div>
+        <div>> <span class="cursor"></span></div>
+    </div>
+
     <header>
         <div class="header-content">
-            <div style="display:flex; align-items:center; gap:2rem;">
+            <div style="display:flex; align-items:center; gap:2rem; flex-wrap: wrap; justify-content: center;">
                 <img src="images/profile.jpeg" alt="Yash Saxena" class="profile-pic" onerror="this.style.display='none'">
-                <div>
+                <div style="text-align: left;">
                     <h1>YASH SAXENA</h1>
                     <p style="color:var(--text-muted);">// ASIC & Mixed-Signal Engineer</p>
                 </div>
             </div>
 
-            <div style="display:flex; align-items:center; gap:2rem;">
+            <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap: wrap; justify-content: center;">
                 <div class="links">
+                    <a href="YashSaxena_ResumeCV_.pdf" target="_blank">[ Resume ]</a>
                     <a href="mailto:yash.saxena40@gmail.com">[ Email ]</a>
-                    <a href="https://www.linkedin.com/in/yashsaxena5">[ LinkedIn ]</a>
-                    <a href="https://github.com/yashsaxena5">[ GitHub ]</a>
+                    <a href="https://www.linkedin.com/in/yashsaxena5" target="_blank">[ LinkedIn ]</a>
+                    <a href="https://github.com/yashsaxena5" target="_blank">[ GitHub ]</a>
                 </div>
                 <button class="theme-toggle" id="themeToggle">Light Mode</button>
             </div>
@@ -247,7 +358,6 @@
 
     <div class="container">
 
-        <!-- About + Slideshow -->
         <section class="grid-2">
             <div>
                 <h2>> System_Info</h2>
@@ -258,7 +368,7 @@
 
                 <div style="margin:2rem 0;">
                     <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem;">
-                        <img src="images/UIC_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
+                        <img src="images/uic_logo.png" class="company-logo" onerror="this.style.display='none'">
                         <div>
                             <strong>M.S. Electrical & Computer Engineering</strong> — UIC (GPA 3.75)<br>
                             <small style="color:var(--text-muted);">May 2023</small>
@@ -274,25 +384,23 @@
                 </div>
             </div>
 
-            <!-- Slideshow Placeholder -->
             <div>
                 <h2>> Tapeout_Gallery</h2>
                 <div class="slideshow">
                     <div>
-                        <p><strong>Your chip photos will rotate here</strong><br><br>
-                        SPROCKET • CITC • Quantinuum<br>
-                        (Add images to <code>images/chips/</code> folder later)</p>
+                        <p><strong>// CHIP ARCHITECTURE VISUALIZATION</strong><br><br>
+                        Projects: SPROCKET • CITC • Quantinuum<br>
+                        <span style="font-size:0.8rem; color:var(--primary); margin-top:10px; display:block;">Waiting for image input stream...</span></p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Skills -->
         <section>
             <h2>> Loaded_Modules</h2>
             <div class="card">
                 <p><strong>Languages:</strong></p>
-                <div>
+                <div style="margin-bottom: 1rem;">
                     <span class="skill-tag">SystemVerilog</span>
                     <span class="skill-tag">Verilog</span>
                     <span class="skill-tag">Python</span>
@@ -300,50 +408,47 @@
                     <span class="skill-tag">Tcl</span>
                     <span class="skill-tag">MATLAB</span>
                 </div>
-                <p style="margin-top:1.2rem;"><strong>EDA Tools:</strong></p>
-                <div>
+                <p><strong>EDA Tools:</strong></p>
+                <div style="margin-bottom: 1rem;">
                     <span class="skill-tag">Cadence Innovus</span>
                     <span class="skill-tag">Cadence Virtuoso</span>
                     <span class="skill-tag">Synopsys VCS/Verdi</span>
                     <span class="skill-tag">Mentor Questa</span>
                     <span class="skill-tag">Primetime</span>
                 </div>
-                <p style="margin-top:1.2rem;"><strong>Expertise:</strong></p>
+                <p><strong>Expertise:</strong></p>
                 <div>
                     <span class="skill-tag">RTL Design</span>
                     <span class="skill-tag">UVM Verification</span>
                     <span class="skill-tag">Physical Design</span>
                     <span class="skill-tag">Cryogenic Testing</span>
-                    <span class="skill-tag">Python Scripting</span>
                     <span class="skill-tag">Mixed-Signal Design</span>
+                </div>
             </div>
         </section>
 
-        <!-- Experience -->
         <section>
             <h2>> Runtime_Log</h2>
 
-            <!-- Fermilab -->
             <div class="timeline-item">
                 <div style="display:flex; align-items:center; margin-bottom:1rem;">
-                    <div style="width:50px;height:50px;background:#00205b;color:white;display:flex;align-items:center;justify-content:center;border-radius:2px solid var(--primary);border-radius:12px;font-weight:bold;font-size:1.4rem;">
+                    <div style="width:50px;height:50px;background:#004C97;color:white;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:bold;font-size:1.4rem; margin-right: 15px;">
                         F
                     </div>
-                    <div style="margin-left:1rem;">
+                    <div>
                         <strong>ASIC Engineer</strong> — <span style="color:var(--primary);">Fermilab</span><br>
                         <span style="color:var(--text-muted);">Batavia, IL • July 2023 – Present</span>
                     </div>
                 </div>
-                <ul style="margin-left:1.5rem; line-height:1.7;">
-                    <li>Full RTL-to-GDSII flow for 3 custom ASICs (SPROCKET, CITC, Quantinuum) → 20% performance gain</li>
-                    <li>UVM verification environment with scoreboard & coverage for Quantinuum chip</li>
-                    <li>Physical design: floorplan → CTS → P&R → STA → timing ECOs across corners</li>
-                    <li>Cryogenic testing at 4K, MBIST, scan chains, PLL jitter = 1.875 ps RMS</li>
-                    <li>Python automation suite ("Spacely") + I2C over SFP+ optical link @ 1 Mbps</li>
+                <ul style="margin-left:1.5rem; line-height:1.7; list-style-type: square; color: var(--text);">
+                    <li>Full RTL-to-GDSII flow for 3 custom ASICs (SPROCKET, CITC, Quantinuum) → 20% performance gain.</li>
+                    <li>UVM verification environment with scoreboard & coverage for Quantinuum chip.</li>
+                    <li>Physical design: floorplan → CTS → P&R → STA → timing ECOs across corners.</li>
+                    <li>Cryogenic testing at 4K, MBIST, scan chains, PLL jitter = 1.875 ps RMS.</li>
+                    <li>Python automation suite ("Spacely") + I2C over SFP+ optical link @ 1 Mbps.</li>
                 </ul>
             </div>
 
-            <!-- Other experiences -->
             <div class="timeline-item">
                 <div style="display:flex; align-items:center; margin-bottom:0.5rem;">
                     <img src="images/siemens_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
@@ -354,14 +459,13 @@
 
             <div class="timeline-item">
                 <div style="display:flex; align-items:center; margin-bottom:0.5rem;">
-                    <img src="images/UIC_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
+                    <img src="images/uic_logo.png" class="company-logo" onerror="this.style.display='none'">
                     <div><strong>Teaching Assistant</strong> — UIC ECE 210</div>
                 </div>
                 <p style="margin-left:65px;">Graded and managed labs for 300+ students.</p>
             </div>
         </section>
 
-        <!-- Projects -->
         <section>
             <h2>> Project_Logs</h2>
             <div class="grid-3">
@@ -376,17 +480,17 @@
                     <p>Reduced power by 20%, passed NIST randomness tests.</p>
                 </div>
                 <div class="card">
-                    <div class="card-title">MIPS Processor (Single/Multi-cycle)</div>
+                    <div class="card-title">MIPS Processor</div>
                     <div class="card-subtitle">Verilog • Quartus</div>
-                    <p>From ISA to synthesis — with self-checking testbenches.</p>
+                    <p>From ISA to synthesis — Single/Multi-cycle design with self-checking testbenches.</p>
                 </div>
                 <div class="card">
-                    <div class="card-title">Forest Fire Detection CNN</div>
-                    <div class="card-subtitle">PyTorch • 93% acc</div>
-                    <p>Real-time inference latency: 2 ms on edge device.</p>
+                    <div class="card-title">Forest Fire Detection</div>
+                    <div class="card-subtitle">PyTorch • 93% Acc</div>
+                    <p>Real-time inference latency: 2 ms on edge device using CNNs.</p>
                 </div>
                 <div class="card">
-                    <div class="card-title">MAC Datapath in 45nm</div>
+                    <div class="card-title">MAC Datapath (45nm)</div>
                     <div class="card-subtitle">Cadence Virtuoso • Spectre</div>
                     <p>Transistor-level design of adders & multipliers with corner analysis.</p>
                 </div>
@@ -414,23 +518,28 @@
         const bootScreen = document.getElementById('boot-screen');
         let delay = 0;
 
+        // Create lines one by one
         terminalText.forEach((line, index) => {
             setTimeout(() => {
                 const p = document.createElement('div');
                 p.textContent = `> ${line}`;
                 textContainer.appendChild(p);
+                // Auto scroll to bottom
+                bootScreen.scrollTop = bootScreen.scrollHeight;
             }, delay);
-            delay += 600; // Speed of text
+            delay += 600; // Speed between lines
         });
 
+        // Remove boot screen after text finishes
         setTimeout(() => {
             bootScreen.style.opacity = '0';
             setTimeout(() => {
                 bootScreen.style.display = 'none';
             }, 500);
-        }, delay + 500);
+        }, delay + 800);
 
         // --- SCROLL REVEAL SCRIPT ---
+        // This adds the "fade in" effect as you scroll down
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {

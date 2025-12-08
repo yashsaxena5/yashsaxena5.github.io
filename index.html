@@ -39,7 +39,7 @@
             overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
-        /* --- BOOT SCREEN STYLES (Restored) --- */
+        /* --- BOOT SCREEN STYLES --- */
         #boot-screen {
             position: fixed;
             top: 0;
@@ -57,7 +57,7 @@
             font-weight: bold;
         }
 
-        /* CRT Scanline Effect for extra "Hardware" feel */
+        /* CRT Scanline Effect */
         #boot-screen::before {
             content: " ";
             display: block;
@@ -165,7 +165,7 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
 
-        /* --- SCROLL ANIMATIONS (Dynamic Feel) --- */
+        /* --- SCROLL ANIMATIONS --- */
         section {
             opacity: 0;
             transform: translateY(30px);
@@ -196,7 +196,7 @@
             background: var(--card-bg);
             padding: 2rem;
             border: 1px solid var(--border);
-            border-radius: 4px; /* Slightly sharper edges for tech feel */
+            border-radius: 4px;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
@@ -288,6 +288,11 @@
             border-radius: 8px;
             margin-right: 15px;
             object-fit: contain;
+            transition: transform 0.2s;
+        }
+        .company-logo:hover {
+            transform: scale(1.1);
+            cursor: pointer;
         }
 
         .grid-3 {
@@ -368,14 +373,18 @@
 
                 <div style="margin:2rem 0;">
                     <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem;">
-                        <img src="images/uic_logo.png" class="company-logo" onerror="this.style.display='none'">
+                        <a href="https://www.linkedin.com/school/thisisuic/posts/?feedView=all" target="_blank">
+                            <img src="images/UIC_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
+                        </a>
                         <div>
                             <strong>M.S. Electrical & Computer Engineering</strong> — UIC (GPA 3.75)<br>
                             <small style="color:var(--text-muted);">May 2023</small>
                         </div>
                     </div>
                     <div style="display:flex; align-items:center; gap:1rem;">
-                        <img src="images/knit_logo.png" class="company-logo" onerror="this.style.display='none'">
+                        <a href="https://www.linkedin.com/school/kamla-nehru-institute-of-technology-sultanpur/posts/?feedView=all" target="_blank">
+                            <img src="images/knit_logo.png" class="company-logo" onerror="this.style.display='none'">
+                        </a>
                         <div>
                             <strong>B.Tech Electrical Engineering</strong> — KNIT Sultanpur<br>
                             <small style="color:var(--text-muted);">Jun 2019</small>
@@ -432,9 +441,9 @@
 
             <div class="timeline-item">
                 <div style="display:flex; align-items:center; margin-bottom:1rem;">
-                    <div style="width:50px;height:50px;background:#004C97;color:white;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:bold;font-size:1.4rem; margin-right: 15px;">
-                        F
-                    </div>
+                    <a href="https://www.linkedin.com/company/fermilab/posts/?feedView=all" target="_blank">
+                        <img src="images/fermilab_logo.jpeg" class="company-logo" alt="Fermilab" onerror="this.style.display='none'">
+                    </a>
                     <div>
                         <strong>ASIC Engineer</strong> — <span style="color:var(--primary);">Fermilab</span><br>
                         <span style="color:var(--text-muted);">Batavia, IL • July 2023 – Present</span>
@@ -451,16 +460,20 @@
 
             <div class="timeline-item">
                 <div style="display:flex; align-items:center; margin-bottom:0.5rem;">
-                    <img src="images/siemens_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
-                    <div><strong>DCS Engineer Intern</strong> — Siemens, Gurugram</div>
+                    <a href="https://www.linkedin.com/company/siemens/" target="_blank">
+                        <img src="images/siemens_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
+                    </a>
+                    <div style="margin-left:15px;"><strong>DCS Engineer Intern</strong> — Siemens, Gurugram</div>
                 </div>
                 <p style="margin-left:65px;">Built & tested SPPA-T3000 control cabinets for power plants.</p>
             </div>
 
             <div class="timeline-item">
                 <div style="display:flex; align-items:center; margin-bottom:0.5rem;">
-                    <img src="images/uic_logo.png" class="company-logo" onerror="this.style.display='none'">
-                    <div><strong>Teaching Assistant</strong> — UIC ECE 210</div>
+                    <a href="https://www.linkedin.com/school/thisisuic/posts/?feedView=all" target="_blank">
+                        <img src="images/UIC_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
+                    </a>
+                    <div style="margin-left:15px;"><strong>Teaching Assistant</strong> — UIC ECE 210</div>
                 </div>
                 <p style="margin-left:65px;">Graded and managed labs for 300+ students.</p>
             </div>

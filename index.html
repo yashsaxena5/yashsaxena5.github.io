@@ -359,6 +359,50 @@
     </footer>
 
     <script>
+        // --- BOOT SEQUENCE SCRIPT ---
+        const terminalText = [
+            "Initializing Kernel...",
+            "Loading VLSI Modules...",
+            "Checking Peripherals...",
+            "Mounting /home/yash_saxena/...",
+            "Access Granted."
+        ];
+
+        const textContainer = document.getElementById('terminal-text');
+        const bootScreen = document.getElementById('boot-screen');
+        let delay = 0;
+
+        terminalText.forEach((line, index) => {
+            setTimeout(() => {
+                const p = document.createElement('div');
+                p.textContent = `> ${line}`;
+                textContainer.appendChild(p);
+            }, delay);
+            delay += 600; // Speed of text
+        });
+
+        setTimeout(() => {
+            bootScreen.style.opacity = '0';
+            setTimeout(() => {
+                bootScreen.style.display = 'none';
+            }, 500);
+        }, delay + 500);
+
+        // --- SCROLL REVEAL SCRIPT ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+
+    <script>
         const toggle = document.getElementById('themeToggle');
         const body = document.body;
 

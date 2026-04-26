@@ -3,626 +3,1830 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yash Saxena | Mixed-Signal Engineer</title>
+    <title>Yash Saxena | Mixed-Signal Engineer · Fermilab</title>
+    <meta name="description" content="Yash Saxena – ASIC Engineer at Fermilab. Expert in Mixed-Signal design, ADC/FPGA development, RTL-to-GDSII, UVM verification, and cryogenic chip testing for quantum computing.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Dark mode (default) */
-            --bg: #0b0c10;
-            --card-bg: #1f2833;
-            --text: #c5c6c7;
-            --text-muted: #66fcf1;
+            --bg: #050810;
+            --card-bg: #0d1117;
+            --card-bg2: #111827;
+            --text: #c9d1d9;
+            --text-muted: #8b949e;
             --primary: #66fcf1;
+            --primary-dim: rgba(102,252,241,0.15);
             --accent: #45a29e;
-            --border: #45a29e;
+            --accent2: #7c3aed;
+            --accent3: #f59e0b;
+            --border: rgba(102,252,241,0.2);
+            --glow: rgba(102,252,241,0.4);
             --terminal-green: #0aff0a;
-        }
-
-        [data-theme="light"] {
-            --bg: #f8f9fa;
-            --card-bg: #ffffff;
-            --text: #1a1a1a;
-            --text-muted: #0a7c71;
-            --primary: #00d4c4;
-            --accent: #00b8a9;
-            --border: #00d4c4;
-            --terminal-green: #006400;
+            --fermilab-red: #cc0000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
+        html { scroll-behavior: smooth; }
+
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: 'Courier New', monospace;
-            transition: background 0.4s, color 0.4s;
+            font-family: 'Space Grotesk', sans-serif;
             line-height: 1.6;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
         }
 
-        /* --- BOOT SCREEN STYLES --- */
+        /* ─── BOOT SCREEN ─────────────────────────────────────────────── */
         #boot-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; inset: 0;
             background: #000;
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Center vertically for the typewriter part */
+            justify-content: center;
+            align-items: center;
             padding: 2rem;
             color: var(--terminal-green);
+            font-family: 'JetBrains Mono', monospace;
             font-size: 16px;
-            font-weight: bold;
+            transition: opacity 0.7s ease;
         }
-
-        /* CRT Scanline Effect */
         #boot-screen::before {
-            content: " ";
+            content: "";
             display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
+            z-index: 2; pointer-events: none;
         }
-
-        /* The Terminal Logs Container */
         #terminal-log-container {
             position: absolute;
-            bottom: 2rem;
-            left: 2rem;
+            bottom: 2rem; left: 2rem;
+            z-index: 3;
         }
-
-        /* The Main Typewriter Text */
+        #terminal-log-container div {
+            opacity: 0;
+            animation: fadeInLog 0.3s forwards;
+            margin-bottom: 4px;
+        }
+        @keyframes fadeInLog { to { opacity: 1; } }
         #typewriter-text {
-            font-size: 1.5rem;
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
             color: var(--primary);
             text-align: center;
             max-width: 800px;
-            margin: 0 auto;
-            min-height: 50px;
+            min-height: 60px;
             z-index: 3;
-            text-shadow: 0 0 10px var(--primary);
+            text-shadow: 0 0 20px var(--primary);
         }
-
         .cursor {
             display: inline-block;
-            width: 10px;
-            height: 1.5rem;
+            width: 10px; height: 1.2em;
             background: var(--terminal-green);
             animation: blink 1s infinite;
             vertical-align: middle;
+            margin-left: 2px;
+        }
+        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+        /* ─── THREE.JS CANVAS ─────────────────────────────────────────── */
+        #three-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        /* ─── SCROLL WRAPPER ──────────────────────────────────────────── */
+        #scroll-wrapper {
+            position: relative;
+            z-index: 1;
         }
 
-        /* --- LAYOUT STYLES --- */
+        /* ─── HERO SECTION ───────────────────────────────────────────── */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 5vw 6vh;
+            position: relative;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--primary);
+            background: rgba(102,252,241,0.05);
+            margin-bottom: 1.2rem;
+            width: fit-content;
+            backdrop-filter: blur(10px);
+        }
+        .hero-badge .dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,100%{ box-shadow: 0 0 0 0 rgba(102,252,241,0.5); }
+            50%{ box-shadow: 0 0 0 6px rgba(102,252,241,0); }
+        }
+        #hero h1 {
+            font-size: clamp(2.8rem, 7vw, 6rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -1px;
+            color: #fff;
+            text-shadow: 0 0 60px rgba(102,252,241,0.15);
+            margin-bottom: 1rem;
+        }
+        #hero h1 span { color: var(--primary); }
+        #hero .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            margin-bottom: 2rem;
+        }
+        .hero-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .hero-links a {
+            padding: 10px 22px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            backdrop-filter: blur(8px);
+            background: rgba(102,252,241,0.05);
+        }
+        .hero-links a:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 25px var(--glow);
+            transform: translateY(-2px);
+        }
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem; left: 50%;
+            transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            animation: bounceHint 2s ease-in-out infinite;
+        }
+        @keyframes bounceHint {
+            0%,100%{ transform: translateX(-50%) translateY(0); }
+            50%{ transform: translateX(-50%) translateY(8px); }
+        }
+        .scroll-hint .arrow { font-size: 1.4rem; color: var(--primary); }
+
+        /* ─── STICKY HEADER ──────────────────────────────────────────── */
         header {
-            padding: 2rem;
-            border-bottom: 2px solid var(--border);
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 500;
+            padding: 1rem 5vw;
+            backdrop-filter: blur(20px);
+            background: rgba(5,8,16,0.8);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .header-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+            text-shadow: 0 0 15px var(--glow);
+            letter-spacing: 1px;
+        }
+        nav { display: flex; gap: 0.5rem; align-items: center; }
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        nav a:hover { color: var(--primary); background: var(--primary-dim); }
+        .nav-cta {
+            padding: 8px 18px;
+            background: var(--primary-dim);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--primary) !important;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        .nav-cta:hover {
+            background: var(--primary) !important;
+            color: #000 !important;
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        /* ─── QUANTUM SCROLL SECTION ─────────────────────────────────── */
+        #quantum-scroll {
+            height: 300vh; /* tall for scroll-driven 3D animation */
+            position: relative;
+        }
+        .quantum-sticky {
             position: sticky;
             top: 0;
-            backdrop-filter: blur(10px);
-            background: rgba(11, 12, 16, 0.95);
-            z-index: 100;
-            transition: background 0.4s;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            pointer-events: none;
         }
-        [data-theme="light"] header { background: rgba(255,255,255,0.95); }
+        .quantum-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .quantum-title {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 700;
+            color: #fff;
+            max-width: 700px;
+            line-height: 1.2;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            transform: translateY(30px);
+        }
+        .quantum-desc {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin-top: 1rem;
+            opacity: 0;
+            transition: opacity 0.5s 0.1s;
+        }
+        .quantum-sticky.phase-1 .quantum-label,
+        .quantum-sticky.phase-1 .quantum-title,
+        .quantum-sticky.phase-1 .quantum-desc { opacity: 1; transform: translateY(0); }
+        .quantum-sticky.phase-2 .quantum-label,
+        .quantum-sticky.phase-2 .quantum-title,
+        .quantum-sticky.phase-2 .quantum-desc { opacity: 1; transform: translateY(0); }
 
-        .header-content {
-            max-width: 1200px;
+        /* ─── FERMILAB REVEAL ────────────────────────────────────────── */
+        #fermilab-reveal {
+            padding: 12vh 5vw;
+            position: relative;
+            overflow: hidden;
+        }
+        .fermilab-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            max-width: 1300px;
             margin: 0 auto;
+        }
+        .fermilab-text .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--fermilab-red);
+            margin-bottom: 1rem;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .fermilab-text .label::before {
+            content: '';
+            display: inline-block;
+            width: 30px; height: 2px;
+            background: var(--fermilab-red);
+        }
+        .fermilab-text h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            color: #fff;
+            margin-bottom: 1.5rem;
+        }
+        .fermilab-text h2 em {
+            font-style: normal;
+            color: var(--primary);
+        }
+        .fermilab-text p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 1.2rem;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem;
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(102,252,241,0.1);
+            transform: translateY(-3px);
+        }
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+        .fermilab-image-panel {
+            position: relative;
+        }
+        .fermilab-image-panel img {
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 0 60px rgba(102,252,241,0.1);
+        }
+        .fermilab-badge {
+            position: absolute;
+            bottom: -20px; right: -20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(12px);
+        }
+        .fermilab-badge .org { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 2px; }
+        .fermilab-badge .name { font-weight: 700; color: var(--primary); font-size: 0.95rem; }
+
+        /* ─── SECTION GENERIC ─────────────────────────────────────────── */
+        .section {
+            padding: 10vh 5vw;
+            max-width: 1300px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .section.visible { opacity: 1; transform: translateY(0); }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 30px; height: 2px;
+            background: var(--primary);
+        }
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 3rem;
+            line-height: 1.1;
+        }
+        .section-title span { color: var(--primary); }
+
+        /* ─── SKILL GRID ─────────────────────────────────────────────── */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .skill-block {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.8rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .skill-block::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
+        }
+        .skill-block:hover::after { transform: scaleX(1); }
+        .skill-block:hover {
+            border-color: rgba(102,252,241,0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(102,252,241,0.08);
+        }
+        .skill-block-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+        .skill-block-title { font-weight: 700; color: #fff; margin-bottom: 0.5rem; font-size: 1rem; }
+        .skill-block-sub { font-size: 0.8rem; color: var(--primary); font-family: 'JetBrains Mono', monospace; margin-bottom: 1.2rem; }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag {
+            padding: 4px 10px;
+            border: 1px solid rgba(102,252,241,0.2);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: rgba(102,252,241,0.03);
+            transition: all 0.2s;
+            cursor: default;
+        }
+        .tag:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-dim);
+        }
+        .tag.highlight {
+            border-color: var(--accent3);
+            color: var(--accent3);
+            background: rgba(245,158,11,0.05);
+        }
+        .tag.highlight:hover {
+            background: rgba(245,158,11,0.15);
+        }
+        .tag.purple {
+            border-color: #a78bfa;
+            color: #a78bfa;
+            background: rgba(167,139,250,0.05);
+        }
+
+        /* ─── ADC/FPGA HIGHLIGHT SECTION ─────────────────────────────── */
+        #adc-fpga {
+            padding: 10vh 5vw;
+            background: linear-gradient(180deg, transparent 0%, rgba(102,252,241,0.02) 50%, transparent 100%);
+            position: relative;
+        }
+        .adc-fpga-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .big-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .big-card:hover {
+            border-color: rgba(102,252,241,0.5);
+            box-shadow: 0 20px 60px rgba(102,252,241,0.08);
+            transform: translateY(-5px);
+        }
+        .big-card .card-glow {
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(102,252,241,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .big-card.purple-card .card-glow {
+            background: radial-gradient(circle, rgba(167,139,250,0.1) 0%, transparent 70%);
+        }
+        .big-card-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .big-card-title { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+        .big-card-sub { font-size: 0.85rem; color: var(--primary); font-family: 'JetBrains Mono', monospace; margin-bottom: 1.5rem; }
+        .big-card.purple-card .big-card-sub { color: #a78bfa; }
+        .spec-list { list-style: none; }
+        .spec-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .spec-list li:last-child { border-bottom: none; }
+        .spec-list li::before {
+            content: '▸';
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .big-card.purple-card .spec-list li::before { color: #a78bfa; }
+        .spec-list strong { color: var(--text); }
+
+        /* ─── TIMELINE ───────────────────────────────────────────────── */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px; top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--accent), transparent);
+            opacity: 0.3;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3.5rem;
+            animation-fill-mode: both;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -37px; top: 6px;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 12px var(--glow);
+            z-index: 2;
+        }
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .company-logo {
+            width: 44px; height: 44px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #fff;
+            padding: 4px;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+        .company-logo:hover { transform: scale(1.1); }
+        .timeline-meta .role {
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .timeline-meta .company { color: var(--primary); font-weight: 600; }
+        .timeline-meta .period {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .timeline-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        .timeline-content ul { list-style: none; }
+        .timeline-content ul li {
+            display: flex;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        .timeline-content ul li::before {
+            content: '→';
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        /* ─── PROJECTS ───────────────────────────────────────────────── */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.8rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .project-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent2));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+        .project-card:hover::before { transform: scaleX(1); }
+        .project-card:hover {
+            border-color: rgba(102,252,241,0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102,252,241,0.08);
+        }
+        .project-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 100px;
+            background: var(--primary-dim);
+            color: var(--primary);
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 1rem;
+        }
+        .project-title { font-weight: 700; color: #fff; font-size: 1.05rem; margin-bottom: 0.5rem; }
+        .project-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; }
+
+        /* ─── EDUCATION ─────────────────────────────────────────────── */
+        .edu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .edu-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+            transition: all 0.3s;
+        }
+        .edu-card:hover {
+            border-color: rgba(102,252,241,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102,252,241,0.06);
+        }
+        .edu-card img {
+            width: 50px; height: 50px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #fff;
+            padding: 4px;
+            flex-shrink: 0;
+        }
+        .edu-degree { font-weight: 700; color: #fff; font-size: 1rem; }
+        .edu-school { color: var(--primary); font-size: 0.9rem; margin: 3px 0; }
+        .edu-year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ─── FOOTER ─────────────────────────────────────────────────── */
+        footer {
+            padding: 5rem 5vw 3rem;
+            border-top: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 2rem;
         }
-
-        .profile-pic {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            border: 4px solid var(--primary);
-            object-fit: cover;
-            box-shadow: 0 0 25px rgba(102, 252, 241, 0.5);
-            transition: all 0.3s;
+        .footer-left .name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.3rem;
         }
-        .profile-pic:hover { transform: scale(1.05); }
-
-        h1 {
-            color: var(--primary);
-            font-size: 2.2rem;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
+        .footer-left .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
-
-        .links a {
-            color: var(--primary);
-            margin-left: 1.5rem;
+        .footer-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .footer-links a {
+            color: var(--text-muted);
             text-decoration: none;
-            font-weight: bold;
-            position: relative;
-        }
-        .links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background-color: var(--primary);
-            transition: width 0.3s;
-        }
-        .links a:hover::after { width: 100%; }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            padding: 10px 16px;
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .theme-toggle:hover {
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 0 15px var(--primary);
-        }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
-
-        /* --- SCROLL ANIMATIONS --- */
-        section {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-            margin-bottom: 5rem;
-        }
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        h2 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border-left: 5px solid var(--primary);
-            padding-left: 12px;
-            font-size: 1.6rem;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-
-        /* --- CARDS --- */
-        .card {
-            background: var(--card-bg);
-            padding: 2rem;
+            font-size: 0.85rem;
+            padding: 8px 16px;
             border: 1px solid var(--border);
-            border-radius: 4px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+            border-radius: 6px;
+            transition: all 0.2s;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(102, 252, 241, 0.15);
+        .footer-links a:hover {
+            color: var(--primary);
             border-color: var(--primary);
+            background: var(--primary-dim);
         }
-        /* Circuit Trace Effect */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 2px;
-            background: var(--primary);
-            transition: 0.5s;
-        }
-        .card:hover::before { left: 0; }
-
-        .slideshow {
-            width: 100%;
-            height: 380px;
-            background: var(--card-bg);
-            border: 2px dashed var(--accent);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .footer-copy {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
             color: var(--text-muted);
             text-align: center;
-            padding: 2rem;
+            padding-top: 2rem;
+            width: 100%;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 1rem;
         }
 
-        .skill-tag {
-            display: inline-block;
-            background: rgba(102,252,241,0.05);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            padding: 6px 12px;
-            margin: 5px 8px 5px 0;
-            border-radius: 2px;
-            font-size: 0.9rem;
-            transition: 0.2s;
+        /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .fermilab-hero { grid-template-columns: 1fr; }
+            .adc-fpga-grid { grid-template-columns: 1fr; }
+            .edu-grid { grid-template-columns: 1fr; }
         }
-        .skill-tag:hover {
-            background: var(--primary);
-            color: #000;
-            cursor: crosshair;
+        @media (max-width: 600px) {
+            nav a:not(.nav-cta) { display: none; }
+            #hero h1 { font-size: 2.5rem; }
         }
 
-        .timeline-item {
-            position: relative;
-            padding-left: 30px;
-            margin-bottom: 2.5rem;
+        /* ─── PARTICLE CANVAS OVERLAY ───────────────────────────────── */
+        #particles-canvas {
+            position: fixed; inset: 0;
+            z-index: 0;
+            pointer-events: none;
         }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 8px;
-            width: 12px;
-            height: 12px;
-            background: var(--bg);
-            border: 2px solid var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary);
-            z-index: 2;
-        }
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: 5px;
-            top: 24px;
-            bottom: -2.5rem;
-            width: 2px;
-            background: var(--accent);
+
+        /* ─── GLOW DIVIDER ────────────────────────────────────────────── */
+        .glow-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
             opacity: 0.3;
-        }
-        .timeline-item:last-child::after { display: none; }
-
-        .company-logo {
-            width: 50px;
-            height: 50px;
-            padding: 5px;
-            background: white;
-            border-radius: 8px;
-            margin-right: 15px;
-            object-fit: contain;
-            transition: transform 0.2s;
-        }
-        .company-logo:hover {
-            transform: scale(1.1);
-            cursor: pointer;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .card-title {
-            color: #fff; /* Always white in dark mode */
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        [data-theme="light"] .card-title { color: #000; }
-
-        .card-subtitle {
-            color: var(--primary);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            font-style: italic;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem;
-            border-top: 1px solid var(--border);
-            color: var(--text-muted);
-        }
-
-        @media (max-width: 868px) {
-            .grid-2 { grid-template-columns: 1fr; }
-            .header-content { flex-direction: column; text-align: center; }
-            h1 { font-size: 2rem; }
-            .links { margin: 1rem 0; }
-            .links a { margin: 0 10px; }
+            margin: 0;
         }
     </style>
 </head>
-<body data-theme="dark">
+<body>
 
-    <div id="boot-screen">
-        <div id="typewriter-text"><span id="typed-content"></span><span class="cursor"></span></div>
-        
-        <div id="terminal-log-container"></div>
+<!-- PARTICLE CANVAS -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- THREE.JS CANVAS -->
+<canvas id="three-canvas"></canvas>
+
+<!-- BOOT SCREEN -->
+<div id="boot-screen">
+    <div id="typewriter-text"><span id="typed-content"></span><span class="cursor"></span></div>
+    <div id="terminal-log-container"></div>
+</div>
+
+<!-- STICKY HEADER -->
+<header>
+    <div class="header-logo">YS://</div>
+    <nav>
+        <a href="#about">About</a>
+        <a href="#expertise">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="mailto:yash.saxena40@gmail.com" class="nav-cta">Contact</a>
+    </nav>
+</header>
+
+<div id="scroll-wrapper">
+
+    <!-- ══ HERO ════════════════════════════════════════════════════════ -->
+    <section id="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Currently: ASIC Engineer @ Fermilab · Batavia, IL
+        </div>
+        <h1>YASH<br><span>SAXENA</span></h1>
+        <p class="subtitle">// Mixed-Signal Engineer · ASIC · ADC · FPGA · Quantum Computing</p>
+        <div class="hero-links">
+            <a href="YashSaxena_ResumeCV_.pdf" target="_blank">[ Resume ]</a>
+            <a href="mailto:yash.saxena40@gmail.com">[ Email ]</a>
+            <a href="https://www.linkedin.com/in/yashsaxena5" target="_blank">[ LinkedIn ]</a>
+            <a href="https://github.com/yashsaxena5" target="_blank">[ GitHub ]</a>
+        </div>
+        <div class="scroll-hint">
+            <span>Scroll to explore</span>
+            <span class="arrow">↓</span>
+        </div>
+    </section>
+
+    <!-- ══ 3D QUANTUM → CHIP SCROLL SECTION ════════════════════════════ -->
+    <div id="quantum-scroll">
+        <div class="quantum-sticky" id="quantum-sticky">
+            <div class="quantum-label" id="q-label">Quantum Computing Infrastructure</div>
+            <div class="quantum-title" id="q-title">Designing Chips for the<br>Quantum Frontier</div>
+            <div class="quantum-desc" id="q-desc">Dilution refrigerator · 4 Kelvin · Superconducting qubits</div>
+        </div>
     </div>
 
-    <header>
-        <div class="header-content">
-            <div style="display:flex; align-items:center; gap:2rem; flex-wrap: wrap; justify-content: center;">
-                <img src="images/profile.jpeg" alt="Yash Saxena" class="profile-pic" onerror="this.style.display='none'">
-                <div style="text-align: left;">
-                    <h1>YASH SAXENA</h1>
-                    <p style="color:var(--text-muted);">// Mixed-Signal Engineer</p>
+    <div class="glow-divider"></div>
+
+    <!-- ══ FERMILAB REVEAL ══════════════════════════════════════════════ -->
+    <div id="fermilab-reveal" id="about">
+        <div class="fermilab-hero">
+            <div class="fermilab-text">
+                <div class="label">Current Position</div>
+                <h2>Working at<br><em>Fermilab</em>,<br>America's Premier<br>Particle Physics Lab</h2>
+                <p>Designing readout ASICs for particle physics detectors and quantum computing applications. Custom mixed-signal chips that operate at cryogenic temperatures (4K), interfacing superconducting quantum processors to classical control electronics.</p>
+                <p>Led full RTL-to-GDSII flow for three production ASICs — SPROCKET, CITC, and the Quantinuum readout chip — achieving 20% performance gains over prior generation.</p>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">1.875 ps</div>
+                        <div class="stat-label">PLL Jitter RMS (measured)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3 ASICs</div>
+                        <div class="stat-label">RTL-to-GDSII Tape-outs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">4 K</div>
+                        <div class="stat-label">Cryogenic Test Temperature</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1 Mbps</div>
+                        <div class="stat-label">I²C over SFP+ Optical Link</div>
+                    </div>
                 </div>
             </div>
-
-            <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap: wrap; justify-content: center;">
-                <div class="links">
-                    <a href="YashSaxena_ResumeCV_.pdf" target="_blank">[ Resume ]</a>
-                    <a href="mailto:yash.saxena40@gmail.com">[ Email ]</a>
-                    <a href="https://www.linkedin.com/in/yashsaxena5" target="_blank">[ LinkedIn ]</a>
-                    <a href="https://github.com/yashsaxena5" target="_blank">[ GitHub ]</a>
+            <div class="fermilab-image-panel">
+                <img src="images/chip_pcb.png" alt="Custom ASIC wirebonded on PCB – Fermilab readout chip">
+                <div class="fermilab-badge">
+                    <div class="org">Fermilab · Batavia, IL</div>
+                    <div class="name">ASIC Engineer · Jul 2023 – Present</div>
                 </div>
-                <button class="theme-toggle" id="themeToggle">Light Mode</button>
             </div>
         </div>
-    </header>
-
-    <div class="container">
-
-        <section class="grid-2">
-            <div>
-                <h2>> System_Info</h2>
-                <p style="margin:2rem 0; line-height:1.8;">
-                    Full-custom Mixed-Signal engineer with expertise in RTL design, UVM verification, physical implementation, and cryogenic testing. 
-                    Currently designing readout chips for particle physics and quantum computing at Fermilab.
-                </p>
-
-                <div style="margin:2rem 0;">
-                    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem;">
-                        <a href="https://www.linkedin.com/school/thisisuic/posts/?feedView=all" target="_blank">
-                            <img src="images/UIC_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
-                        </a>
-                        <div>
-                            <strong>M.S. Electrical & Computer Engineering</strong> — UIC (GPA 3.75)<br>
-                            <small style="color:var(--text-muted);">May 2023</small>
-                        </div>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:1rem;">
-                        <a href="https://www.linkedin.com/school/kamla-nehru-institute-of-technology-sultanpur/posts/?feedView=all" target="_blank">
-                            <img src="images/knit_logo.png" class="company-logo" onerror="this.style.display='none'">
-                        </a>
-                        <div>
-                            <strong>B.Tech Electrical Engineering</strong> — KNIT Sultanpur<br>
-                            <small style="color:var(--text-muted);">Jun 2019</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <h2>> Tapeout_Gallery</h2>
-                <div class="slideshow">
-                    <div>
-                        <p><strong>// CHIP ARCHITECTURE VISUALIZATION</strong><br><br>
-                        Projects: SPROCKET • CITC • Quantinuum<br>
-                        <span style="font-size:0.8rem; color:var(--primary); margin-top:10px; display:block;">Waiting for image input stream...</span></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2>> Loaded_Modules</h2>
-            <div class="card">
-                <p><strong>Languages:</strong></p>
-                <div style="margin-bottom: 1rem;">
-                    <span class="skill-tag">SystemVerilog</span>
-                    <span class="skill-tag">Verilog</span>
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">C/C++</span>
-                    <span class="skill-tag">Tcl</span>
-                    <span class="skill-tag">MATLAB</span>
-                </div>
-                <p><strong>EDA Tools:</strong></p>
-                <div style="margin-bottom: 1rem;">
-                    <span class="skill-tag">Cadence Innovus</span>
-                    <span class="skill-tag">Cadence Virtuoso</span>
-                    <span class="skill-tag">Synopsys VCS/Verdi</span>
-                    <span class="skill-tag">Mentor Questa</span>
-                    <span class="skill-tag">Primetime</span>
-                </div>
-                <p><strong>Expertise:</strong></p>
-                <div>
-                    <span class="skill-tag">RTL Design</span>
-                    <span class="skill-tag">UVM Verification</span>
-                    <span class="skill-tag">Physical Design</span>
-                    <span class="skill-tag">Cryogenic Testing</span>
-                    <span class="skill-tag">Mixed-Signal Design</span>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2>> Runtime_Log</h2>
-
-            <div class="timeline-item">
-                <div style="display:flex; align-items:center; margin-bottom:1rem;">
-                    <a href="https://www.linkedin.com/company/fermilab/posts/?feedView=all" target="_blank">
-                        <img src="images/fermilab.jpeg" class="company-logo" alt="Fermilab" onerror="this.style.display='none'">
-                    </a>
-                    <div>
-                        <strong>ASIC Engineer</strong> — <span style="color:var(--primary);">Fermilab</span><br>
-                        <span style="color:var(--text-muted);">Batavia, IL • July 2023 – Present</span>
-                    </div>
-                </div>
-                <ul style="margin-left:1.5rem; line-height:1.7; list-style-type: square; color: var(--text);">
-                    <li>Full RTL-to-GDSII flow for 3 custom ASICs (SPROCKET, CITC, Quantinuum) → 20% performance gain.</li>
-                    <li>UVM verification environment with scoreboard & coverage for Quantinuum chip.</li>
-                    <li>Physical design: floorplan → CTS → P&R → STA → timing ECOs across corners.</li>
-                    <li>Cryogenic testing at 4K, MBIST, scan chains, PLL jitter = 1.875 ps RMS.</li>
-                    <li>Python automation suite ("Spacely") + I2C over SFP+ optical link @ 1 Mbps.</li>
-                </ul>
-            </div>
-
-            <div class="timeline-item">
-                <div style="display:flex; align-items:center; margin-bottom:0.5rem;">
-                    <a href="https://www.linkedin.com/company/siemens/" target="_blank">
-                        <img src="images/siemens_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
-                    </a>
-                    <div style="margin-left:15px;"><strong>DCS Engineer Intern</strong> — Siemens, Gurugram</div>
-                </div>
-                <p style="margin-left:65px;">Built & tested SPPA-T3000 control cabinets for power plants.</p>
-            </div>
-
-            <div class="timeline-item">
-                <div style="display:flex; align-items:center; margin-bottom:0.5rem;">
-                    <a href="https://www.linkedin.com/school/thisisuic/posts/?feedView=all" target="_blank">
-                        <img src="images/UIC_logo.jpeg" class="company-logo" onerror="this.style.display='none'">
-                    </a>
-                    <div style="margin-left:15px;"><strong>Teaching Assistant</strong> — UIC ECE 210</div>
-                </div>
-                <p style="margin-left:65px;">Graded and managed labs for 300+ students.</p>
-            </div>
-        </section>
-
-        <section>
-            <h2>> Project_Logs</h2>
-            <div class="grid-3">
-                <div class="card">
-                    <div class="card-title">SPI Memory Verification</div>
-                    <div class="card-subtitle">UVM • SystemVerilog</div>
-                    <p>Full UVM testbench with scoreboard, coverage-driven verification of a SPI flash controller.</p>
-                </div>
-                <div class="card">
-                    <div class="card-title">PUF & TRNG on SAR ADC</div>
-                    <div class="card-subtitle">VLSID 2023 Paper • Python</div>
-                    <p>Reduced power by 20%, passed NIST randomness tests.</p>
-                </div>
-                <div class="card">
-                    <div class="card-title">MIPS Processor</div>
-                    <div class="card-subtitle">Verilog • Quartus</div>
-                    <p>From ISA to synthesis — Single/Multi-cycle design with self-checking testbenches.</p>
-                </div>
-                <div class="card">
-                    <div class="card-title">Forest Fire Detection</div>
-                    <div class="card-subtitle">PyTorch • 93% Acc</div>
-                    <p>Real-time inference latency: 2 ms on edge device using CNNs.</p>
-                </div>
-                <div class="card">
-                    <div class="card-title">MAC Datapath (45nm)</div>
-                    <div class="card-subtitle">Cadence Virtuoso • Spectre</div>
-                    <p>Transistor-level design of adders & multipliers with corner analysis.</p>
-                </div>
-            </div>
-        </section>
-
     </div>
 
+    <div class="glow-divider"></div>
+
+    <!-- ══ ADC / FPGA HIGHLIGHT ═════════════════════════════════════════ -->
+    <div id="adc-fpga" id="expertise">
+        <div class="adc-fpga-grid">
+            <div class="big-card">
+                <div class="card-glow"></div>
+                <div class="big-card-icon">📡</div>
+                <div class="big-card-title">ADC Design & Expertise</div>
+                <div class="big-card-sub">// Analog-to-Digital Converters</div>
+                <ul class="spec-list">
+                    <li><strong>SAR ADC</strong> — published VLSID 2023 paper on PUF &amp; TRNG integration; 20% power reduction vs. baseline</li>
+                    <li><strong>High-speed readout ADCs</strong> — designed for cryogenic mixed-signal environments at Fermilab</li>
+                    <li><strong>NIST randomness tests</strong> — passed all 15 SP800-22 tests on ADC-based TRNG</li>
+                    <li><strong>Spectre simulations</strong> — corner, Monte Carlo, and mismatch analysis at transistor level</li>
+                    <li><strong>Cryogenic characterization</strong> — ADC linearity (INL/DNL) at 4 K operating point</li>
+                    <li><strong>Tools:</strong> Cadence Virtuoso · Spectre · Cadence Innovus · MATLAB</li>
+                </ul>
+            </div>
+            <div class="big-card purple-card">
+                <div class="card-glow"></div>
+                <div class="big-card-icon">🔲</div>
+                <div class="big-card-title">FPGA Development</div>
+                <div class="big-card-sub">// Field-Programmable Gate Arrays</div>
+                <ul class="spec-list">
+                    <li><strong>RTL design</strong> — SystemVerilog / Verilog HDL targeting Xilinx &amp; Intel/Altera FPGAs</li>
+                    <li><strong>MIPS processor</strong> — full ISA-to-synthesis flow with single &amp; multi-cycle implementations on FPGA</li>
+                    <li><strong>UVM verification</strong> — complete testbench with scoreboard, coverage, SPI/I²C protocol BFMs</li>
+                    <li><strong>Synthesis &amp; timing closure</strong> — STA, timing ECOs, multi-corner analysis in Quartus Prime &amp; Vivado</li>
+                    <li><strong>Python automation</strong> — "Spacely" framework for FPGA-based chip bring-up and test automation</li>
+                    <li><strong>Tools:</strong> Quartus Prime · Xilinx Vivado · Mentor Questa · Synopsys VCS/Verdi</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="glow-divider"></div>
+
+    <!-- ══ SKILLS / LOADED MODULES ══════════════════════════════════════ -->
+    <div class="section" id="skills-section">
+        <div class="section-label">System Modules</div>
+        <div class="section-title">Loaded <span>Expertise</span></div>
+        <div class="skills-grid">
+            <div class="skill-block">
+                <div class="skill-block-icon">⚡</div>
+                <div class="skill-block-title">RTL & Verification</div>
+                <div class="skill-block-sub">// Digital Design Flow</div>
+                <div class="tags">
+                    <span class="tag highlight">SystemVerilog</span>
+                    <span class="tag highlight">Verilog</span>
+                    <span class="tag">UVM</span>
+                    <span class="tag">RTL-to-GDSII</span>
+                    <span class="tag">STA</span>
+                    <span class="tag">DFT / MBIST</span>
+                    <span class="tag">Scan Chains</span>
+                    <span class="tag">Timing ECO</span>
+                </div>
+            </div>
+            <div class="skill-block">
+                <div class="skill-block-icon">🔬</div>
+                <div class="skill-block-title">Analog & Mixed-Signal</div>
+                <div class="skill-block-sub">// Custom IC Design</div>
+                <div class="tags">
+                    <span class="tag highlight">SAR ADC</span>
+                    <span class="tag highlight">PLL Design</span>
+                    <span class="tag">45nm CMOS</span>
+                    <span class="tag">Spectre Sim</span>
+                    <span class="tag">Corner Analysis</span>
+                    <span class="tag">Virtuoso Layout</span>
+                    <span class="tag">Floorplanning</span>
+                </div>
+            </div>
+            <div class="skill-block">
+                <div class="skill-block-icon">🔲</div>
+                <div class="skill-block-title">FPGA & EDA Tools</div>
+                <div class="skill-block-sub">// Programmable Logic</div>
+                <div class="tags">
+                    <span class="tag highlight">Quartus Prime</span>
+                    <span class="tag highlight">Xilinx Vivado</span>
+                    <span class="tag">Cadence Innovus</span>
+                    <span class="tag">Synopsys VCS</span>
+                    <span class="tag">Primetime</span>
+                    <span class="tag">Mentor Questa</span>
+                </div>
+            </div>
+            <div class="skill-block">
+                <div class="skill-block-icon">❄️</div>
+                <div class="skill-block-title">Cryogenic & Quantum</div>
+                <div class="skill-block-sub">// Quantum Computing Hardware</div>
+                <div class="tags">
+                    <span class="tag">4K Cryo Testing</span>
+                    <span class="tag">Dilution Fridge</span>
+                    <span class="tag">Wirebonding</span>
+                    <span class="tag">Qubit Readout</span>
+                    <span class="tag">I²C / SFP+</span>
+                    <span class="tag">ASIC Bringup</span>
+                </div>
+            </div>
+            <div class="skill-block">
+                <div class="skill-block-icon">🐍</div>
+                <div class="skill-block-title">Software & Scripting</div>
+                <div class="skill-block-sub">// Automation & ML</div>
+                <div class="tags">
+                    <span class="tag highlight">Python</span>
+                    <span class="tag">C / C++</span>
+                    <span class="tag">Tcl</span>
+                    <span class="tag">MATLAB</span>
+                    <span class="tag">PyTorch</span>
+                    <span class="tag">NumPy</span>
+                </div>
+            </div>
+            <div class="skill-block">
+                <div class="skill-block-icon">📡</div>
+                <div class="skill-block-title">Protocols & Interfaces</div>
+                <div class="skill-block-sub">// Communication Standards</div>
+                <div class="tags">
+                    <span class="tag">SPI</span>
+                    <span class="tag">I²C</span>
+                    <span class="tag">UART</span>
+                    <span class="tag">SFP+ Optical</span>
+                    <span class="tag">AXI</span>
+                    <span class="tag">PCIe</span>
+                    <span class="tag">JTAG</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="glow-divider"></div>
+
+    <!-- ══ EXPERIENCE TIMELINE ══════════════════════════════════════════ -->
+    <div class="section" id="experience">
+        <div class="section-label">Runtime Log</div>
+        <div class="section-title">Work <span>Experience</span></div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <a href="https://www.linkedin.com/company/fermilab/" target="_blank">
+                        <img src="images/fermilab.jpeg" class="company-logo" alt="Fermilab">
+                    </a>
+                    <div class="timeline-meta">
+                        <div class="role">ASIC Engineer</div>
+                        <div class="company">Fermilab — Batavia, IL</div>
+                        <div class="period">July 2023 – Present</div>
+                    </div>
+                </div>
+                <div class="timeline-content">
+                    <ul>
+                        <li>Full RTL-to-GDSII flow for 3 custom ASICs (SPROCKET, CITC, Quantinuum) → 20% performance gain over prior generation.</li>
+                        <li>Built complete UVM verification environment with scoreboard &amp; functional coverage for Quantinuum readout chip.</li>
+                        <li>Physical design: floorplan → CTS → P&amp;R → STA → timing ECOs across PVT corners.</li>
+                        <li>Cryogenic testing at 4 K, MBIST, scan chains, and PLL jitter measurement: 1.875 ps RMS.</li>
+                        <li>Python automation suite ("Spacely") + I²C over SFP+ optical link @ 1 Mbps for chip bring-up.</li>
+                        <li>DFT insertion: scan chains, MBIST, and JTAG boundary-scan for production test coverage.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <a href="https://www.linkedin.com/company/siemens/" target="_blank">
+                        <img src="images/siemens_logo.jpeg" class="company-logo" alt="Siemens">
+                    </a>
+                    <div class="timeline-meta">
+                        <div class="role">DCS Engineer Intern</div>
+                        <div class="company">Siemens — Gurugram, India</div>
+                        <div class="period">2019 – 2020</div>
+                    </div>
+                </div>
+                <div class="timeline-content">
+                    <ul>
+                        <li>Built and tested SPPA-T3000 distributed control system cabinets for power plant automation.</li>
+                        <li>Performed hardware integration and verification of industrial control electronics.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <a href="https://www.linkedin.com/school/thisisuic/" target="_blank">
+                        <img src="images/UIC_logo.jpeg" class="company-logo" alt="UIC">
+                    </a>
+                    <div class="timeline-meta">
+                        <div class="role">Teaching Assistant — ECE 210</div>
+                        <div class="company">University of Illinois Chicago</div>
+                        <div class="period">2022 – 2023</div>
+                    </div>
+                </div>
+                <div class="timeline-content">
+                    <ul>
+                        <li>Graded assignments and managed laboratory sessions for 300+ students enrolled in ECE 210.</li>
+                        <li>Mentored students in circuit analysis, digital logic, and FPGA lab exercises.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="glow-divider"></div>
+
+    <!-- ══ PROJECTS ════════════════════════════════════════════════════ -->
+    <div class="section" id="projects">
+        <div class="section-label">Project Logs</div>
+        <div class="section-title">Featured <span>Work</span></div>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-tag">UVM · SystemVerilog</div>
+                <div class="project-title">SPI Memory Controller Verification</div>
+                <div class="project-desc">Full UVM testbench environment with layered architecture — driver, monitor, scoreboard, functional coverage. Coverage-driven verification of a SPI flash memory controller achieving 98% coverage closure.</div>
+            </div>
+            <div class="project-card">
+                <div class="project-tag">ADC · VLSID 2023 Paper</div>
+                <div class="project-title">PUF &amp; TRNG on SAR ADC</div>
+                <div class="project-desc">Novel physical unclonable function and true random number generator leveraging SAR ADC mismatch. 20% power reduction; passed all 15 NIST SP800-22 statistical randomness tests. Published at VLSID 2023.</div>
+            </div>
+            <div class="project-card">
+                <div class="project-tag">FPGA · Verilog · Quartus</div>
+                <div class="project-title">MIPS Processor on FPGA</div>
+                <div class="project-desc">ISA design to synthesized implementation — single-cycle and multi-cycle MIPS CPU with full instruction set, hazard detection, forwarding unit, and self-checking testbenches on Intel/Altera FPGA.</div>
+            </div>
+            <div class="project-card">
+                <div class="project-tag">PyTorch · CV · Edge AI</div>
+                <div class="project-title">Forest Fire Detection CNN</div>
+                <div class="project-desc">Real-time forest fire detection using convolutional neural network. 93% accuracy; 2 ms inference latency on edge device. Optimized for deployment on resource-constrained embedded hardware.</div>
+            </div>
+            <div class="project-card">
+                <div class="project-tag">Virtuoso · Spectre · 45nm</div>
+                <div class="project-title">MAC Datapath — 45nm Full-Custom</div>
+                <div class="project-desc">Transistor-level design of multiply-accumulate datapath in 45nm CMOS. Custom adder trees and multipliers with full corner analysis (SS/FF/TT), Monte Carlo mismatch, and layout DRC/LVS clean.</div>
+            </div>
+            <div class="project-card">
+                <div class="project-tag">Python · Automation · Bringup</div>
+                <div class="project-title">Spacely — ASIC Test Framework</div>
+                <div class="project-desc">Python-based chip bring-up automation suite developed at Fermilab. I²C command sequencing over SFP+ optical links at 1 Mbps; automated scan chain testing, MBIST execution, and register map validation.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="glow-divider"></div>
+
+    <!-- ══ EDUCATION ════════════════════════════════════════════════════ -->
+    <div class="section" id="education">
+        <div class="section-label">Academic Credentials</div>
+        <div class="section-title">Education</div>
+        <div class="edu-grid">
+            <div class="edu-card">
+                <img src="images/UIC_logo.jpeg" alt="UIC" onerror="this.style.display='none'">
+                <div>
+                    <div class="edu-degree">M.S. Electrical &amp; Computer Engineering</div>
+                    <div class="edu-school">University of Illinois Chicago (UIC)</div>
+                    <div class="edu-year">GPA: 3.75 · May 2023</div>
+                </div>
+            </div>
+            <div class="edu-card">
+                <img src="images/knit_logo.png" alt="KNIT" onerror="this.style.display='none'">
+                <div>
+                    <div class="edu-degree">B.Tech Electrical Engineering</div>
+                    <div class="edu-school">KNIT Sultanpur</div>
+                    <div class="edu-year">Jun 2019</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ FOOTER ════════════════════════════════════════════════════ -->
     <footer>
-        <p>Yash Saxena • (630)-219-9217 • yash.saxena40@gmail.com</p>
-        <p style="margin-top:8px;">[ End of Transmission ]</p>
+        <div class="footer-left">
+            <div class="name">Yash Saxena</div>
+            <div class="tagline">// ASIC · ADC · FPGA · Quantum Computing Hardware</div>
+        </div>
+        <div class="footer-links">
+            <a href="YashSaxena_ResumeCV_.pdf" target="_blank">Resume</a>
+            <a href="mailto:yash.saxena40@gmail.com">yash.saxena40@gmail.com</a>
+            <a href="tel:+16302199217">(630) 219-9217</a>
+            <a href="https://www.linkedin.com/in/yashsaxena5" target="_blank">LinkedIn</a>
+            <a href="https://github.com/yashsaxena5" target="_blank">GitHub</a>
+        </div>
+        <div class="footer-copy">[ End of Transmission ] · Yash Saxena © 2025 · Batavia, IL</div>
     </footer>
 
-    <script>
-        // --- BOOT SEQUENCE SCRIPT ---
-        
-        // 1. Logs that appear at the bottom left
-        const terminalText = [
-            "Initializing Kernel...",
-            "Loading VLSI Modules...",
-            "Checking Peripherals...",
-            "Mounting /home/yash_saxena/...",
-            "Access Granted."
-        ];
+</div><!-- end scroll-wrapper -->
 
-        // 2. The funky message to type in the center
-        const typeWriterMessage = "Hello there, Hello World. You are entering the domain of Yash Saxena, Mixed-Signal Engineer.";
+<!-- ══ THREE.JS ════════════════════════════════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script>
+// ─── BOOT SEQUENCE ──────────────────────────────────────────────────────
+const terminalLines = [
+    "[ OK ] Initializing VLSI kernel...",
+    "[ OK ] Loading RTL modules...",
+    "[ OK ] Mounting Fermilab data streams...",
+    "[ OK ] Cryogenic interface @ 4K...",
+    "[ OK ] ADC/FPGA subsystems online...",
+    "[ OK ] Access granted."
+];
+const typeWriterMessage = "Hello there. You are entering the domain of Yash Saxena — Mixed-Signal Engineer at Fermilab.";
 
-        const logContainer = document.getElementById('terminal-log-container');
-        const bootScreen = document.getElementById('boot-screen');
-        const typedContentSpan = document.getElementById('typed-content');
-        let delay = 0;
+const logContainer = document.getElementById('terminal-log-container');
+const bootScreen = document.getElementById('boot-screen');
+const typedSpan = document.getElementById('typed-content');
 
-        // PHASE 1: Terminal Logs
-        terminalText.forEach((line, index) => {
+let delay = 0;
+terminalLines.forEach((line, i) => {
+    setTimeout(() => {
+        const d = document.createElement('div');
+        d.textContent = line;
+        d.style.color = i === terminalLines.length - 1 ? '#66fcf1' : '#0aff0a';
+        logContainer.appendChild(d);
+    }, delay);
+    delay += 420;
+});
+
+setTimeout(() => {
+    logContainer.style.display = 'none';
+    let i = 0;
+    function typeWriter() {
+        if (i < typeWriterMessage.length) {
+            typedSpan.textContent += typeWriterMessage[i++];
+            setTimeout(typeWriter, 45);
+        } else {
             setTimeout(() => {
-                const p = document.createElement('div');
-                p.textContent = `> ${line}`;
-                logContainer.appendChild(p);
-            }, delay);
-            delay += 500; 
+                bootScreen.style.opacity = '0';
+                setTimeout(() => { bootScreen.style.display = 'none'; }, 700);
+            }, 1200);
+        }
+    }
+    typeWriter();
+}, delay + 400);
+
+// ─── THREE.JS 3D SCENE ──────────────────────────────────────────────────
+const canvas3D = document.getElementById('three-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas: canvas3D, alpha: true, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 0, 5);
+
+// Lights
+const ambientLight = new THREE.AmbientLight(0x66fcf1, 0.3);
+scene.add(ambientLight);
+const pointLight1 = new THREE.PointLight(0x66fcf1, 2, 20);
+pointLight1.position.set(3, 3, 3);
+scene.add(pointLight1);
+const pointLight2 = new THREE.PointLight(0x7c3aed, 1, 15);
+pointLight2.position.set(-3, -2, 2);
+scene.add(pointLight2);
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+dirLight.position.set(1, 2, 3);
+scene.add(dirLight);
+
+// ── Build Quantum Computer Model ─────────────────────────────────────
+const quantumGroup = new THREE.Group();
+scene.add(quantumGroup);
+
+// Main cylinder (vacuum can exterior)
+const vacCanGeo = new THREE.CylinderGeometry(0.6, 0.65, 2.8, 32, 1, true);
+const vacCanMat = new THREE.MeshPhongMaterial({
+    color: 0xaaaaaa, shininess: 90, side: THREE.BackSide,
+    transparent: true, opacity: 0.25,
+    wireframe: false
+});
+const vacCan = new THREE.Mesh(vacCanGeo, vacCanMat);
+quantumGroup.add(vacCan);
+
+// Top plate
+const topPlateGeo = new THREE.CylinderGeometry(0.7, 0.7, 0.08, 32);
+const metalMat = new THREE.MeshPhongMaterial({ color: 0x888888, shininess: 120 });
+const topPlate = new THREE.Mesh(topPlateGeo, metalMat);
+topPlate.position.y = 1.4;
+quantumGroup.add(topPlate);
+
+// Thermal shield rings (gold/copper colored)
+const ringColors = [0xf5c842, 0xd4943a, 0xe0a040, 0xc8813a];
+const ringHeights = [0.9, 0.3, -0.3, -0.9];
+ringHeights.forEach((y, i) => {
+    const ringGeo = new THREE.TorusGeometry(0.42 - i * 0.02, 0.025, 12, 48);
+    const ringMat = new THREE.MeshPhongMaterial({ color: ringColors[i], shininess: 150 });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.position.y = y;
+    ring.rotation.x = Math.PI / 2;
+    quantumGroup.add(ring);
+});
+
+// Central cylinder stack (coldfinger)
+const stackColors = [0xb8860b, 0x8b6914, 0xd4943a, 0x888888];
+stackColors.forEach((c, i) => {
+    const geo = new THREE.CylinderGeometry(0.07 - i * 0.005, 0.07 - i * 0.005, 0.5, 16);
+    const mat = new THREE.MeshPhongMaterial({ color: c, shininess: 100 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.y = 0.8 - i * 0.55;
+    quantumGroup.add(mesh);
+});
+
+// Coaxial cables (bent wires using thin cylinders)
+for (let i = 0; i < 18; i++) {
+    const angle = (i / 18) * Math.PI * 2;
+    const r = 0.35;
+    const cableGeo = new THREE.CylinderGeometry(0.008, 0.008, 1.8, 6);
+    const cableMat = new THREE.MeshPhongMaterial({
+        color: i % 3 === 0 ? 0xd4943a : i % 3 === 1 ? 0xc0c0c0 : 0xf5c842,
+        shininess: 60
+    });
+    const cable = new THREE.Mesh(cableGeo, cableMat);
+    cable.position.set(Math.cos(angle) * r, -0.1, Math.sin(angle) * r);
+    cable.rotation.z = (Math.random() - 0.5) * 0.4;
+    cable.rotation.x = (Math.random() - 0.5) * 0.2;
+    quantumGroup.add(cable);
+}
+
+// Quantum chip at bottom (glowing)
+const chipGeo = new THREE.BoxGeometry(0.4, 0.02, 0.4);
+const chipMat = new THREE.MeshPhongMaterial({
+    color: 0x111133,
+    emissive: 0x0066ff,
+    emissiveIntensity: 0.8,
+    shininess: 200
+});
+const chip = new THREE.Mesh(chipGeo, chipMat);
+chip.position.y = -1.35;
+quantumGroup.add(chip);
+
+// Chip glow light
+const chipLight = new THREE.PointLight(0x0066ff, 3, 1.5);
+chipLight.position.y = -1.3;
+quantumGroup.add(chipLight);
+
+// Glowing aura ring at base
+const auraGeo = new THREE.TorusGeometry(0.32, 0.05, 8, 48);
+const auraMat = new THREE.MeshPhongMaterial({
+    color: 0x66fcf1,
+    emissive: 0x66fcf1,
+    emissiveIntensity: 1.2,
+    transparent: true, opacity: 0.7
+});
+const aura = new THREE.Mesh(auraGeo, auraMat);
+aura.rotation.x = Math.PI / 2;
+aura.position.y = -1.35;
+quantumGroup.add(aura);
+
+// ── Build PCB/Chip Model ──────────────────────────────────────────────
+const pcbGroup = new THREE.Group();
+scene.add(pcbGroup);
+pcbGroup.visible = false;
+
+// ── Helpers ───────────────────────────────────────────────────────────
+function makeLabelSprite(text, color, fontSize) {
+    color = color || '#00ff88'; fontSize = fontSize || 28;
+    const canvas = document.createElement('canvas');
+    canvas.width = 256; canvas.height = 64;
+    const c = canvas.getContext('2d');
+    c.clearRect(0, 0, 256, 64);
+    c.fillStyle = 'rgba(0,0,0,0.6)';
+    c.beginPath(); c.roundRect(18, 8, 220, 48, 10); c.fill();
+    c.font = 'bold ' + fontSize + 'px "JetBrains Mono", monospace';
+    c.fillStyle = color; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(text, 128, 32);
+    const tex = new THREE.CanvasTexture(canvas);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
+    sp.scale.set(0.72, 0.18, 1);
+    return sp;
+}
+
+function addTrace(group, x1, z1, x2, z2, elbowX, hex) {
+    hex = hex || 0x22dd77;
+    const W = 0.018, H = 0.009, Y = 0.046;
+    const m = new THREE.MeshPhongMaterial({ color: hex, emissive: hex, emissiveIntensity: 0.55 });
+    const l1 = Math.abs(elbowX - x1);
+    if (l1 > 0.01) { const g = new THREE.BoxGeometry(l1, H, W); const msh = new THREE.Mesh(g, m); msh.position.set((x1+elbowX)/2, Y, z1); group.add(msh); }
+    const l2 = Math.abs(z2 - z1);
+    if (l2 > 0.01) { const g = new THREE.BoxGeometry(W, H, l2); const msh = new THREE.Mesh(g, m); msh.position.set(elbowX, Y, (z1+z2)/2); group.add(msh); }
+    const l3 = Math.abs(x2 - elbowX);
+    if (l3 > 0.01) { const g = new THREE.BoxGeometry(l3, H, W); const msh = new THREE.Mesh(g, m); msh.position.set((elbowX+x2)/2, Y, z2); group.add(msh); }
+    const via = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.013, 10), new THREE.MeshPhongMaterial({ color: 0xddaa00, shininess: 200 }));
+    via.position.set(elbowX, Y+0.003, z1); group.add(via);
+}
+function addHTrace(group, x1, x2, z, hex) {
+    hex = hex || 0x22dd77;
+    const m = new THREE.MeshPhongMaterial({ color: hex, emissive: hex, emissiveIntensity: 0.5 });
+    const g = new THREE.BoxGeometry(Math.abs(x2-x1), 0.009, 0.018);
+    const msh = new THREE.Mesh(g, m); msh.position.set((x1+x2)/2, 0.046, z); group.add(msh);
+}
+function addVTrace(group, x, z1, z2, hex) {
+    hex = hex || 0x22dd77;
+    const m = new THREE.MeshPhongMaterial({ color: hex, emissive: hex, emissiveIntensity: 0.5 });
+    const g = new THREE.BoxGeometry(0.018, 0.009, Math.abs(z2-z1));
+    const msh = new THREE.Mesh(g, m); msh.position.set(x, 0.046, (z1+z2)/2); group.add(msh);
+}
+function addWireBond(group, x0, z0, x1, z1) {
+    const pts = [];
+    for (let t = 0; t <= 16; t++) {
+        const u = t/16, arch = 0.15;
+        pts.push(new THREE.Vector3(x0+(x1-x0)*u, 0.1+arch*4*u*(1-u), z0+(z1-z0)*u));
+    }
+    const geo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 14, 0.008, 5, false);
+    group.add(new THREE.Mesh(geo, new THREE.MeshPhongMaterial({ color: 0xffc800, shininess: 220 })));
+}
+
+// ── PCB Board ─────────────────────────────────────────────────────────
+const pcbGeo = new THREE.BoxGeometry(4.4, 0.09, 3.2);
+const pcbMat = new THREE.MeshPhongMaterial({ color: 0x0a2e14, shininess: 30 });
+const pcbBoard = new THREE.Mesh(pcbGeo, pcbMat);
+pcbGroup.add(pcbBoard);
+
+// Gold board outline border strips
+const bMat = new THREE.MeshPhongMaterial({ color: 0xc8a000, shininess: 100 });
+const bTop2 = new THREE.Mesh(new THREE.BoxGeometry(4.4,0.013,0.04), bMat); bTop2.position.set(0,0.046,-1.6); pcbGroup.add(bTop2);
+const bBot2 = new THREE.Mesh(new THREE.BoxGeometry(4.4,0.013,0.04), bMat); bBot2.position.set(0,0.046, 1.6); pcbGroup.add(bBot2);
+const bLft  = new THREE.Mesh(new THREE.BoxGeometry(0.04,0.013,3.2), bMat); bLft.position.set(-2.2,0.046,0); pcbGroup.add(bLft);
+const bRgt  = new THREE.Mesh(new THREE.BoxGeometry(0.04,0.013,3.2), bMat); bRgt.position.set( 2.2,0.046,0); pcbGroup.add(bRgt);
+
+// Copper pour zones
+const pourMat = new THREE.MeshPhongMaterial({ color: 0x185a30, emissive: 0x0a3318, emissiveIntensity: 0.3 });
+[[-1.5,-0.9],[1.4,-0.9],[-1.5,0.7],[1.4,0.7]].forEach(([px,pz]) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(0.72,0.006,0.58), pourMat);
+    m.position.set(px,0.048,pz); pcbGroup.add(m);
+});
+
+// Mounting holes
+const holeMat2 = new THREE.MeshPhongMaterial({ color: 0x050505 });
+[[-1.9,-1.3],[1.9,-1.3],[-1.9,1.3],[1.9,1.3]].forEach(([hx,hz]) => {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.07,0.025,8,24), new THREE.MeshPhongMaterial({ color: 0xddaa00, shininess: 200 }));
+    ring.rotation.x = Math.PI/2; ring.position.set(hx,0.048,hz); pcbGroup.add(ring);
+    const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.058,0.058,0.1,16), holeMat2);
+    hole.position.set(hx,0,hz); pcbGroup.add(hole);
+});
+
+// ── ASIC Die ─────────────────────────────────────────────────────────
+const dieGeo = new THREE.BoxGeometry(0.82, 0.055, 0.82);
+const dieMat = new THREE.MeshPhongMaterial({ color: 0x080818, shininess: 240, emissive: 0x000a22, emissiveIntensity: 0.8 });
+const dieMesh = new THREE.Mesh(dieGeo, dieMat);
+dieMesh.position.y = 0.072; pcbGroup.add(dieMesh);
+
+// Die surface metal grid (M7 routing layer simulation)
+for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 9; col++) {
+        const isH = row%2===0;
+        const mg = new THREE.BoxGeometry(isH?0.074:0.009, 0.006, isH?0.009:0.074);
+        const metal = new THREE.Mesh(mg, new THREE.MeshPhongMaterial({ color: 0x7a8898, shininess: 220 }));
+        metal.position.set(-0.345+col*0.086, 0.102, -0.345+row*0.086);
+        pcbGroup.add(metal);
+    }
+}
+
+// Die bond pad ring
+const padMat = new THREE.MeshPhongMaterial({ color: 0xffd700, shininess: 240 });
+for (let i = 0; i < 10; i++) {
+    const t = i/9;
+    [-0.42, 0.42].forEach(side => {
+        const px = new THREE.Mesh(new THREE.BoxGeometry(0.038,0.007,0.028), padMat);
+        px.position.set(-0.37+t*0.74, 0.102, side); pcbGroup.add(px);
+        const pz = new THREE.Mesh(new THREE.BoxGeometry(0.028,0.007,0.038), padMat);
+        pz.position.set(side, 0.102, -0.37+t*0.74); pcbGroup.add(pz);
+    });
+}
+
+// ── Arched Gold Wire Bonds ────────────────────────────────────────────
+const wbConfigs = [
+    [-0.28,-0.42,-0.28,-0.72],[-0.14,-0.42,-0.14,-0.72],[0,-0.42,0,-0.72],[0.14,-0.42,0.14,-0.72],[0.28,-0.42,0.28,-0.72],
+    [-0.28, 0.42,-0.28, 0.72],[-0.14, 0.42,-0.14, 0.72],[0, 0.42,0, 0.72],[0.14, 0.42,0.14, 0.72],[0.28, 0.42,0.28, 0.72],
+    [-0.42,-0.28,-0.72,-0.28],[-0.42,-0.14,-0.72,-0.14],[-0.42,0,-0.72,0],[-0.42,0.14,-0.72,0.14],[-0.42,0.28,-0.72,0.28],
+    [ 0.42,-0.28, 0.72,-0.28],[ 0.42,-0.14, 0.72,-0.14],[ 0.42,0, 0.72,0],[ 0.42,0.14, 0.72,0.14],[ 0.42,0.28, 0.72,0.28],
+];
+wbConfigs.forEach(([dx,dz,px,pz]) => addWireBond(pcbGroup,dx,dz,px,pz));
+
+// ── Resistors R11–R16 ─────────────────────────────────────────────────
+const resistors = [
+    { label:'R11', x:-1.3, z:-0.6 }, { label:'R12', x:-1.3, z:-0.2 },
+    { label:'R13', x:-1.3, z: 0.2 }, { label:'R14', x: 1.3, z:-0.5 },
+    { label:'R15', x: 1.3, z: 0.1 }, { label:'R16', x: 0.3, z: 1.05 },
+];
+const rBodyMat = new THREE.MeshPhongMaterial({ color: 0x1a1a1a, shininess: 120 });
+const rCapMat  = new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 180 });
+resistors.forEach(({ label, x, z }) => {
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.22,0.07,0.11), rBodyMat);
+    body.position.set(x, 0.083, z); pcbGroup.add(body);
+    [-0.12, 0.12].forEach(ox => {
+        const cap = new THREE.Mesh(new THREE.BoxGeometry(0.03,0.075,0.115), rCapMat);
+        cap.position.set(x+ox, 0.083, z); pcbGroup.add(cap);
+    });
+    // Value stripe
+    const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.018,0.076,0.112),
+        new THREE.MeshPhongMaterial({ color: 0xff6600, shininess: 80 }));
+    stripe.position.set(x+0.04, 0.083, z); pcbGroup.add(stripe);
+    const sp = makeLabelSprite(label, '#66fcf1', 26);
+    sp.position.set(x, 0.22, z); pcbGroup.add(sp);
+});
+
+// ── Capacitors C1–C5 ─────────────────────────────────────────────────
+const caps = [
+    { label:'C1', x:-0.6, z:-1.05 }, { label:'C2', x: 0.0, z:-1.05 },
+    { label:'C3', x: 0.6, z:-1.05 }, { label:'C4', x: 1.6, z: 0.5 },
+    { label:'C5', x:-1.6, z: 0.5 },
+];
+const cBodyMat = new THREE.MeshPhongMaterial({ color: 0x0d2a6e, shininess: 140 });
+caps.forEach(({ label, x, z }) => {
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.14,0.1,0.14), cBodyMat);
+    body.position.set(x, 0.095, z); pcbGroup.add(body);
+    const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.03,0.102,0.142),
+        new THREE.MeshPhongMaterial({ color: 0xeeeeee }));
+    stripe.position.set(x-0.056, 0.095, z); pcbGroup.add(stripe);
+    [-0.04,0.04].forEach(dz => {
+        const lead = new THREE.Mesh(new THREE.BoxGeometry(0.025,0.065,0.02), rCapMat);
+        lead.position.set(x, 0.075, z+dz); pcbGroup.add(lead);
+    });
+    const sp = makeLabelSprite(label, '#f59e0b', 26);
+    sp.position.set(x, 0.26, z); pcbGroup.add(sp);
+});
+
+// ── Inductors L1–L2 ──────────────────────────────────────────────────
+const inductors = [
+    { label:'L1', x:-0.9, z: 1.05 },
+    { label:'L2', x: 0.9, z:-0.95 },
+];
+inductors.forEach(({ label, x, z }) => {
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.22,0.08,0.12),
+        new THREE.MeshPhongMaterial({ color: 0x2d2d2d, shininess: 80 }));
+    body.position.set(x, 0.085, z); pcbGroup.add(body);
+    for (let i = 0; i < 5; i++) {
+        const w = new THREE.Mesh(new THREE.BoxGeometry(0.01,0.082,0.122),
+            new THREE.MeshPhongMaterial({ color: 0xffd700, shininess: 180 }));
+        w.position.set(x-0.08+i*0.04, 0.085, z); pcbGroup.add(w);
+    }
+    const sp = makeLabelSprite(label, '#a78bfa', 26);
+    sp.position.set(x, 0.24, z); pcbGroup.add(sp);
+});
+
+// ── Edge Connector J1 (right side) ────────────────────────────────────
+const connBody = new THREE.Mesh(new THREE.BoxGeometry(0.18,0.14,1.2),
+    new THREE.MeshPhongMaterial({ color: 0x111111, shininess: 60 }));
+connBody.position.set(2.0, 0.1, 0); pcbGroup.add(connBody);
+for (let i = 0; i < 10; i++) {
+    const pin = new THREE.Mesh(new THREE.BoxGeometry(0.08,0.12,0.04),
+        new THREE.MeshPhongMaterial({ color: 0xddaa00, shininess: 200 }));
+    pin.position.set(2.12, 0.09, -0.51+i*0.114); pcbGroup.add(pin);
+}
+const j1sp = makeLabelSprite('J1  CONN', '#ffffff', 22);
+j1sp.position.set(2.0, 0.32, 0); pcbGroup.add(j1sp);
+
+// ── SMA RF Connector ──────────────────────────────────────────────────
+const smaMat = new THREE.MeshPhongMaterial({ color: 0xbbbbbb, shininess: 200 });
+const smaBody = new THREE.Mesh(new THREE.CylinderGeometry(0.09,0.09,0.22,16), smaMat);
+smaBody.rotation.x = Math.PI/2; smaBody.position.set(-1.6,0.14,-1.55); pcbGroup.add(smaBody);
+const smaHex = new THREE.Mesh(new THREE.CylinderGeometry(0.11,0.11,0.1,6), smaMat);
+smaHex.rotation.x = Math.PI/2; smaHex.position.set(-1.6,0.14,-1.42); pcbGroup.add(smaHex);
+const smaSp = makeLabelSprite('SMA RF', '#ff6060', 24);
+smaSp.position.set(-1.6, 0.32, -1.5); pcbGroup.add(smaSp);
+
+// ── JTAG Header ───────────────────────────────────────────────────────
+const jtagBase = new THREE.Mesh(new THREE.BoxGeometry(0.55,0.08,0.28),
+    new THREE.MeshPhongMaterial({ color: 0x222222 }));
+jtagBase.position.set(0.7, 0.085, -1.06); pcbGroup.add(jtagBase);
+for (let col = 0; col < 5; col++) for (let row = 0; row < 2; row++) {
+    const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.2,8),
+        new THREE.MeshPhongMaterial({ color: 0xddaa00, shininess: 200 }));
+    pin.position.set(0.46+col*0.1, 0.18, -0.99-row*0.1); pcbGroup.add(pin);
+}
+const jtagSp = makeLabelSprite('JTAG', '#66fcf1', 24);
+jtagSp.position.set(0.7, 0.27, -1.08); pcbGroup.add(jtagSp);
+
+// ── Crystal Oscillator Y1 ─────────────────────────────────────────────
+const xtalBody = new THREE.Mesh(new THREE.BoxGeometry(0.16,0.09,0.28),
+    new THREE.MeshPhongMaterial({ color: 0xc8c8c8, shininess: 200 }));
+xtalBody.position.set(-0.4, 0.09, -0.96); pcbGroup.add(xtalBody);
+const xtalSp = makeLabelSprite('Y1 XTAL', '#ffd700', 22);
+xtalSp.position.set(-0.4, 0.27, -0.93); pcbGroup.add(xtalSp);
+
+// ── Via Fields ────────────────────────────────────────────────────────
+const viaMat = new THREE.MeshPhongMaterial({ color: 0xddaa00, shininess: 180 });
+[[-0.95,-0.72],[-0.95,-0.55],[-0.75,-0.72],[-0.75,-0.55],
+ [ 0.95,-0.72],[ 0.95,-0.55],[ 0.75,-0.72],[ 0.75,-0.55],
+ [-0.95, 0.55],[-0.95, 0.72],[ 0.95, 0.55],[ 0.95, 0.72],
+ [ 0.25,-0.80],[-0.25,-0.80]].forEach(([vx,vz]) => {
+    const v = new THREE.Mesh(new THREE.CylinderGeometry(0.022,0.022,0.095,10), viaMat);
+    v.position.set(vx,0.001,vz); pcbGroup.add(v);
+});
+
+// ── Copper Traces (ASIC → Components) ────────────────────────────────
+// Left resistors R11-R13
+addTrace(pcbGroup,-0.72,-0.28, resistors[0].x+0.12, resistors[0].z, -0.95, 0x22ee88);
+addTrace(pcbGroup,-0.72, 0,    resistors[1].x+0.12, resistors[1].z, -0.95, 0x22ee88);
+addTrace(pcbGroup,-0.72, 0.28, resistors[2].x+0.12, resistors[2].z, -0.95, 0x22ee88);
+// Right resistors R14-R15
+addTrace(pcbGroup, 0.72,-0.28, resistors[3].x-0.12, resistors[3].z,  0.95, 0x22dd77);
+addTrace(pcbGroup, 0.72, 0.14, resistors[4].x-0.12, resistors[4].z,  0.95, 0x22dd77);
+// Bottom resistor R16
+addTrace(pcbGroup, 0.14, 0.72, resistors[5].x, resistors[5].z-0.06, 0.3, 0x22ee88);
+// Capacitors C1-C3 (bottom)
+addTrace(pcbGroup,-0.28, 0.72, caps[0].x, caps[0].z+0.08, -0.6, 0x44aaff);
+addTrace(pcbGroup, 0,    0.72, caps[1].x, caps[1].z+0.08,  0,   0x44aaff);
+addTrace(pcbGroup, 0.28, 0.72, caps[2].x, caps[2].z+0.08,  0.6, 0x44aaff);
+// Capacitor C4 right, C5 left
+addTrace(pcbGroup, 0.72, 0.14, caps[3].x-0.08, caps[3].z, 1.1, 0x44aaff);
+addTrace(pcbGroup,-0.72,-0.14, caps[4].x+0.08, caps[4].z,-1.1, 0x44aaff);
+// Inductors
+addTrace(pcbGroup,-0.28, 0.72, inductors[0].x, inductors[0].z-0.07,-0.9, 0xaa88ff);
+addTrace(pcbGroup, 0.72,-0.14, inductors[1].x-0.12, inductors[1].z, 0.9, 0xaa88ff);
+// Power bus rails
+addHTrace(pcbGroup,-1.9, 1.9,-0.76, 0x33cc66);
+addHTrace(pcbGroup,-1.9, 1.9, 0.76, 0x226644);
+addVTrace(pcbGroup,-1.9,-0.76, 0.76, 0x33cc66);
+addVTrace(pcbGroup, 1.9,-0.76, 0.76, 0x33cc66);
+// GND to holes
+addTrace(pcbGroup,-1.9,-0.76,-1.9,-1.3,-1.9, 0x226644);
+addTrace(pcbGroup, 1.9,-0.76, 1.9,-1.3, 1.9, 0x226644);
+// JTAG
+addTrace(pcbGroup, 0.14,-0.72, 0.46,-0.99, 0.46, 0x22ee88);
+addTrace(pcbGroup, 0.28,-0.72, 0.56,-0.99, 0.56, 0x22dd66);
+// SMA RF
+addTrace(pcbGroup,-0.42,-0.72,-1.6,-1.46,-1.6, 0xff4444);
+// Crystal
+addTrace(pcbGroup,-0.42,-0.72,-0.4,-0.82,-0.4, 0xffcc00);
+// Edge connector
+addHTrace(pcbGroup, 0.72, 1.92,-0.28, 0x33cc66);
+addHTrace(pcbGroup, 0.72, 1.92, 0.14, 0x33cc66);
+
+// ── Silkscreen label U1 ───────────────────────────────────────────────
+const u1sp = makeLabelSprite('U1  ASIC', '#ffffff', 22);
+u1sp.position.set(0, 0.24, -0.66); pcbGroup.add(u1sp);
+
+// ── PCB Glow Lights ───────────────────────────────────────────────────
+const pcbLight = new THREE.PointLight(0x00ff88, 2.5, 5);
+pcbLight.position.set(0, 1.2, 0); pcbGroup.add(pcbLight);
+const pcbLight2 = new THREE.PointLight(0x66fcf1, 1.8, 3.5);
+pcbLight2.position.set(-1.5, 1, -1); pcbGroup.add(pcbLight2);
+const pcbLight3 = new THREE.PointLight(0x4444ff, 1.2, 3);
+pcbLight3.position.set(1.5, 0.8, 1); pcbGroup.add(pcbLight3);
+const pcbLight4 = new THREE.PointLight(0xffd700, 1.8, 2);
+pcbLight4.position.set(0, 0.6, 0); pcbGroup.add(pcbLight4);
+
+// ── Floating particles ────────────────────────────────────────────────
+const particleCount = 200;
+const particleGeo = new THREE.BufferGeometry();
+const positions = new Float32Array(particleCount * 3);
+for (let i = 0; i < particleCount * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 20;
+}
+particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+const particleMat = new THREE.PointsMaterial({
+    color: 0x66fcf1, size: 0.03, transparent: true, opacity: 0.5
+});
+const particles = new THREE.Points(particleGeo, particleMat);
+scene.add(particles);
+
+// ── Scroll animation state ────────────────────────────────────────────
+let scrollProgress = 0;
+let currentPhase = 0; // 0=hero, 1=zoom-in quantum, 2=morph-to-pcb
+
+const qSection = document.getElementById('quantum-scroll');
+const qSticky = document.getElementById('quantum-sticky');
+const qLabel = document.getElementById('q-label');
+const qTitle = document.getElementById('q-title');
+const qDesc = document.getElementById('q-desc');
+
+function lerp(a, b, t) { return a + (b - a) * Math.min(Math.max(t, 0), 1); }
+
+function updateScene() {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    scrollProgress = window.scrollY / docH;
+
+    // Quantum section bounds
+    const qTop = qSection.offsetTop;
+    const qH = qSection.offsetHeight;
+    const localScroll = (window.scrollY - qTop) / qH;
+    const localClamped = Math.min(Math.max(localScroll, 0), 1);
+
+    // Phase transitions
+    const phase1End = 0.35;  // hero quantum fully visible
+    const phase2Start = 0.45; // start morphing
+    const phase2End = 0.85;   // fully PCB
+
+    if (localClamped < 0) {
+        // Hero phase - quantum present but small, floating
+        quantumGroup.visible = true;
+        pcbGroup.visible = false;
+        quantumGroup.position.set(2.5, 0, 0);
+        quantumGroup.scale.setScalar(0.5);
+        quantumGroup.rotation.y += 0.008;
+    } else if (localClamped <= phase1End) {
+        // Phase 1: quantum zooms in and centers
+        quantumGroup.visible = true;
+        pcbGroup.visible = false;
+        const t = localClamped / phase1End;
+        quantumGroup.position.x = lerp(2.5, 0, t);
+        quantumGroup.position.y = lerp(0, 0, t);
+        const sc = lerp(0.5, 1.1, t);
+        quantumGroup.scale.setScalar(sc);
+
+        // Text fade in
+        qSticky.classList.remove('phase-2');
+        qSticky.classList.toggle('phase-1', t > 0.3);
+
+        qLabel.textContent = 'Quantum Computing Infrastructure';
+        qTitle.innerHTML = 'Designing Chips for the<br>Quantum Frontier';
+        qDesc.textContent = 'Dilution refrigerator · 4 Kelvin · Superconducting qubits';
+
+    } else if (localClamped <= phase2Start) {
+        // Hold
+        quantumGroup.visible = true;
+        pcbGroup.visible = false;
+        quantumGroup.position.set(0, 0, 0);
+        quantumGroup.scale.setScalar(1.1);
+        qSticky.classList.add('phase-1');
+
+    } else if (localClamped <= phase2End) {
+        // Phase 2: morph quantum → PCB
+        const t = (localClamped - phase2Start) / (phase2End - phase2Start);
+        const tEase = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // ease in-out
+
+        if (t < 0.5) {
+            quantumGroup.visible = true;
+            pcbGroup.visible = false;
+            // Quantum zooms in further & fades
+            const sc = lerp(1.1, 2.5, tEase);
+            quantumGroup.scale.setScalar(sc);
+            vacCanMat.opacity = lerp(0.25, 0, tEase * 2);
+        } else {
+            quantumGroup.visible = false;
+            pcbGroup.visible = true;
+            // PCB fades in
+            const t2 = (t - 0.5) * 2;
+            const sc = lerp(0.4, 0.85, t2);
+            pcbGroup.scale.setScalar(sc);
+            pcbGroup.rotation.x = lerp(-0.6, -0.3, t2);
+            pcbGroup.rotation.y = lerp(0.4, 0, t2);
+            pcbGroup.position.y = lerp(-0.5, 0, t2);
+        }
+
+        // Text crossfade
+        if (t < 0.4) {
+            qSticky.classList.add('phase-1');
+            qSticky.classList.remove('phase-2');
+        } else if (t > 0.6) {
+            qSticky.classList.remove('phase-1');
+            qSticky.classList.add('phase-2');
+            qLabel.textContent = 'Fermilab Custom Silicon';
+            qTitle.innerHTML = 'From Quantum Computer<br>to Wirebonded Chip';
+            qDesc.textContent = 'SPROCKET · CITC · Quantinuum — readout ASICs on PCB';
+        }
+    } else {
+        // After PCB section – keep PCB visible at stable position
+        quantumGroup.visible = false;
+        pcbGroup.visible = true;
+        pcbGroup.scale.setScalar(0.85);
+        pcbGroup.rotation.x = -0.3;
+        pcbGroup.rotation.y = 0;
+        pcbGroup.position.y = 0;
+        qSticky.classList.add('phase-2');
+    }
+
+    // Always rotate quantum when visible
+    if (quantumGroup.visible) {
+        quantumGroup.rotation.y += 0.005;
+    }
+    if (pcbGroup.visible) {
+        pcbGroup.rotation.y += 0.003;
+    }
+
+    // Aura pulse
+    const t = Date.now() * 0.001;
+    aura.material.opacity = 0.5 + 0.3 * Math.sin(t * 2);
+    chipLight.intensity = 2 + Math.sin(t * 3) * 1;
+
+    // Move lights slightly
+    pointLight1.position.x = Math.sin(t * 0.5) * 3;
+    pointLight1.position.y = Math.cos(t * 0.3) * 2;
+    pointLight2.position.x = -Math.cos(t * 0.4) * 3;
+
+    // Particle drift
+    particles.rotation.y = t * 0.03;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(updateScene);
+}
+
+window.addEventListener('scroll', () => {});
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Camera position by scroll
+window.addEventListener('scroll', () => {
+    const sy = window.scrollY;
+    const qTop = qSection.offsetTop;
+    const inQuantum = sy > qTop - 200 && sy < qTop + qSection.offsetHeight;
+    if (!inQuantum) {
+        camera.position.x = lerp(camera.position.x, sy < qTop ? 1.5 : -1, 0.08);
+    } else {
+        camera.position.x = lerp(camera.position.x, 0, 0.08);
+    }
+});
+
+updateScene();
+
+// ─── SCROLL REVEAL ─────────────────────────────────────────────────────
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section').forEach(s => revealObserver.observe(s));
+
+// ─── PARTICLE BACKGROUND ───────────────────────────────────────────────
+(function() {
+    const c = document.getElementById('particles-canvas');
+    const ctx = c.getContext('2d');
+    let W = c.width = window.innerWidth;
+    let H = c.height = window.innerHeight;
+    window.addEventListener('resize', () => { W = c.width = window.innerWidth; H = c.height = window.innerHeight; });
+
+    const dots = Array.from({length: 80}, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.5 + 0.5
+    }));
+
+    function drawParticles() {
+        ctx.clearRect(0, 0, W, H);
+        dots.forEach(d => {
+            d.x += d.vx; d.y += d.vy;
+            if (d.x < 0) d.x = W; if (d.x > W) d.x = 0;
+            if (d.y < 0) d.y = H; if (d.y > H) d.y = 0;
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(102,252,241,0.25)';
+            ctx.fill();
         });
-
-        // PHASE 2: Clear Logs & Start Typewriter
-        setTimeout(() => {
-            // Clear the terminal logs
-            logContainer.style.display = 'none';
-            
-            // Start typing the message
-            let i = 0;
-            const typingSpeed = 50; // Speed of typing (ms)
-
-            function typeWriter() {
-                if (i < typeWriterMessage.length) {
-                    typedContentSpan.textContent += typeWriterMessage.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, typingSpeed);
-                } else {
-                    // PHASE 3: Finish & Reveal Site
-                    setTimeout(() => {
-                        bootScreen.style.opacity = '0';
-                        setTimeout(() => {
-                            bootScreen.style.display = 'none';
-                        }, 500);
-                    }, 1500); // Wait 1.5s after typing finishes before fading out
+        // Draw connecting lines
+        for (let i = 0; i < dots.length; i++) {
+            for (let j = i + 1; j < dots.length; j++) {
+                const dx = dots[i].x - dots[j].x;
+                const dy = dots[i].y - dots[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 120) {
+                    ctx.beginPath();
+                    ctx.moveTo(dots[i].x, dots[i].y);
+                    ctx.lineTo(dots[j].x, dots[j].y);
+                    ctx.strokeStyle = `rgba(102,252,241,${0.1 * (1 - dist/120)})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
                 }
             }
-            typeWriter();
-
-        }, delay + 600);
-
-
-        // --- SCROLL REVEAL SCRIPT ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
-        });
-
-        // --- THEME TOGGLE SCRIPT ---
-        const toggle = document.getElementById('themeToggle');
-        const body = document.body;
-
-        toggle.addEventListener('click', () => {
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                toggle.textContent = 'Dark Mode';
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                toggle.textContent = 'Light Mode';
-            }
-        });
-    </script>
+        }
+        requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+})();
+</script>
 </body>
 </html>

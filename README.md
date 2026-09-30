@@ -1,10 +1,10 @@
-# Cyphra installers
+# yashsaxena5.github.io
 
-Static installer-only site published at `https://yashsaxena5.github.io/`.
+Yash Saxena's engineering portfolio is served from the repository root.
 
-- macOS 1.2.0 universal DMG and SHA-256 checksum are hosted directly.
-- Windows 1.2.0 remains disabled until its verified 246.8 MB installer is
-  transferred from the Windows build machine and uploaded as a release asset.
-- No source code, analytics, third-party scripts or package-manager bootstrap.
-- Previous portfolio content is preserved on branch
-  `archive/portfolio-2026-09-30`.
+The Cyphra product page is a compiled static export under `/cyphra/`. It contains public marketing assets and direct installer links only; the proprietary browser source is kept in a separate private repository.
+
+Current public downloads:
+
+- Windows free preview: Cyphra 1.2.1, distributed as a GitHub Release asset.
+- macOS preview: Cyphra 1.2.0, distributed from `/downloads/`.

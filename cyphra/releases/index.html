@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Cyphra release history, verified installers, and what's new on macOS and Windows.">
+  <title>Cyphra releases — Mac and Windows</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #f1f4ff; background: #090d17; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(ellipse at 88% 8%, #1d2746 0, transparent 36%), radial-gradient(ellipse at 0 85%, #11272c 0, transparent 42%), #090d17; }
+    a { color: inherit; }
+    a:focus-visible { outline: 2px solid #a2e1d2; outline-offset: 4px; border-radius: 4px; }
+    .wrap { width: min(100% - 40px, 1060px); margin: auto; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 29px 0; }
+    .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; font-weight: 720; letter-spacing: -.03em; }
+    .brand img { width: 32px; height: 32px; border-radius: 9px; }
+    .back { color: #bdc7dc; text-decoration: none; font-size: 14px; }
+    main { padding: 62px 0 100px; }
+    .eyebrow { color: #9bdccf; font-size: 12px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    h1 { max-width: 790px; margin: 17px 0 16px; font-size: clamp(42px, 7vw, 76px); line-height: 1.02; letter-spacing: -.065em; }
+    .lead { max-width: 680px; margin: 0 0 52px; color: #b9c4d9; font-size: 18px; line-height: 1.65; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .card { padding: 28px; border: 1px solid #ffffff20; border-radius: 24px; background: #ffffff0b; box-shadow: 0 16px 60px #0002; }
+    .card.current { border-color: #94e4d458; background: linear-gradient(145deg, #88dbc818, #ffffff08 44%); }
+    .top { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+    .platform { color: #a5b1c8; font-size: 13px; font-weight: 650; }
+    .badge { padding: 6px 10px; border: 1px solid #ffffff24; border-radius: 100px; color: #bfcede; font-size: 11px; white-space: nowrap; }
+    .current .badge { border-color: #92e0d160; color: #9ee5d6; }
+    h2 { margin: 12px 0 7px; font-size: 26px; letter-spacing: -.035em; }
+    .summary { min-height: 52px; margin: 0; color: #b9c4d9; line-height: 1.55; }
+    ul { margin: 23px 0 25px; padding-left: 20px; color: #dce5f4; line-height: 1.7; }
+    li + li { margin-top: 5px; }
+    .action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px; border-radius: 12px; background: #b7edde; color: #0a1b1a; font-size: 14px; font-weight: 750; text-decoration: none; }
+    .action:hover { background: #d4fff3; }
+    .disabled { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 1px solid #ffffff2a; border-radius: 12px; color: #aebbd0; font-size: 14px; }
+    .note { margin: 14px 0 0; color: #abb9ce; font-size: 12px; line-height: 1.6; }
+    .warning { color: #f1cf9e; }
+    h3 { margin: 50px 0 18px; font-size: 21px; letter-spacing: -.025em; }
+    .footer { border-top: 1px solid #ffffff1b; padding: 25px 0 38px; color: #9eacc3; font-size: 13px; }
+    @media (max-width: 700px) { main { padding-top: 42px; } .grid { grid-template-columns: 1fr; } .summary { min-height: 0; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="../"><img src="../images/cyphra-icon.png" alt=""> Cyphra</a>
+      <a class="back" href="../">Back to Cyphra ↗</a>
+    </header>
+    <main>
+      <div class="eyebrow">Release history</div>
+      <h1>Choose the right Cyphra for your desktop.</h1>
+      <p class="lead">The Mac and Windows editions are separate native builds. Each installer is listed with its version and release status; an unverified build is never presented as a trusted download.</p>
+
+      <div class="grid">
+        <article class="card current">
+          <div class="top"><span class="platform">macOS · Apple Silicon and Intel</span><span class="badge">Unsigned preview · 1.2.1</span></div>
+          <h2>Cyphra for Mac 1.2.1</h2>
+          <p class="summary">A native SwiftUI and WebKit update focused on elegant full-page browsing and stronger local security.</p>
+          <ul>
+            <li>Floating glass controls, right-side tabs and bottom address capsule.</li>
+            <li>Five native themes and a clearer full-address safety warning.</li>
+            <li>App Sandbox and migration of local history and profile data.</li>
+            <li>Pinned native Ollama runtime and model checks; bounded news and career downloads.</li>
+          </ul>
+          <a class="action" href="../../downloads/Cyphra-1.2.1-preview.dmg" download>Download Mac 1.2.1 preview</a>
+          <p class="note warning">This is an ad-hoc-signed developer preview, not a trusted public release. Gatekeeper may block it. Do not bypass macOS security warnings. Developer ID signing and notarization are still pending.</p>
+        </article>
+
+        <article class="card">
+          <div class="top"><span class="platform">macOS · Previous preview</span><span class="badge">Legacy · 1.2.0</span></div>
+          <h2>Cyphra for Mac 1.2.0</h2>
+          <p class="summary">The original native Mac preview with core browsing, workspaces and local AI setup.</p>
+          <ul>
+            <li>WebKit tabs, split panes, bookmarks, downloads and private windows.</li>
+            <li>Local history, Keychain passwords, voice commands and Copilot.</li>
+            <li>Market, research, learning and career workspaces.</li>
+            <li>Installer provisions native Ollama and a starter local model.</li>
+          </ul>
+          <a class="action" href="../../downloads/Cyphra-1.2.0.dmg" download>Download archived Mac 1.2.0</a>
+          <p class="note warning">This historical preview is ad-hoc signed and may be rejected by Gatekeeper. It is not a trusted public release; do not bypass macOS security warnings.</p>
+        </article>
+      </div>
+
+      <h3>Windows edition</h3>
+      <div class="grid">
+        <article class="card">
+          <div class="top"><span class="platform">Windows · Separate native edition</span><span class="badge">Installer pending verification</span></div>
+          <h2>Cyphra for Windows 1.2.1</h2>
+          <p class="summary">Windows has its own build and installer. Its release asset is currently unavailable, so the download remains disabled until the Windows maintainer verifies it.</p>
+          <ul>
+            <li>Multi-pane browsing and the Cyphra home workspace.</li>
+            <li>Local AI, voice commands and productivity tools.</li>
+            <li>Windows-specific installer and dependencies handled separately.</li>
+          </ul>
+          <span class="disabled">Windows installer coming after verification</span>
+          <p class="note">The Windows maintainer will publish an exact versioned installer and update this card.</p>
+        </article>
+      </div>
+    </main>
+    <div class="footer">Cyphra is built separately for macOS and Windows. Your browser history stays on your device.</div>
+  </div>
+</body>
+</html>

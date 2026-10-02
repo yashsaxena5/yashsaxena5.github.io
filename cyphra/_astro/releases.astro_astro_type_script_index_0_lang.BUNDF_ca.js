@@ -1,0 +1,1 @@
+import{t as e}from"./os.BuLzvA4z.js";e(document.querySelector(`[data-platforms]`));

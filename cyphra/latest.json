@@ -1,6 +1,6 @@
 {
-  "version": "1.5.0",
+  "version": "1.6.0",
   "url": "https://yashsaxena5.github.io/cyphra/",
-  "sha256": "7b4942f0f067c9d43cbf0e057f00ea2c314fcd389bd54fa772db657565e46762",
-  "security": true
+  "sha256": "dc837a6eaa9cf7af181c9a2e7018494692d75e6e2e13a71fcd387c5e433d1c1c",
+  "security": false
 }

@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Yash Saxena — ASIC Engineer at Fermilab</title>
-    <meta name="description" content="Yash Saxena is an ASIC engineer at Fermilab who designs, verifies and brings up custom chips for cryogenic detectors and quantum computing: SystemVerilog RTL, UVM verification, FPGA firmware and post-silicon validation at 4 K and 77 K.">
+    <meta name="description" content="Yash Saxena is an ASIC engineer at Fermilab working on design verification and post-silicon validation of cryogenic chips for particle detectors and quantum computing.">
     <link rel="canonical" href="https://yashsaxena5.github.io/">
-    <meta name="theme-color" content="#faf9f6" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#fbfaf7">
 
     <meta property="og:type" content="profile">
     <meta property="og:title" content="Yash Saxena — ASIC Engineer at Fermilab">
-    <meta property="og:description" content="RTL design, UVM verification and post-silicon validation of cryogenic ASICs for quantum computing and particle detectors.">
+    <meta property="og:description" content="Design verification and post-silicon validation of cryogenic ASICs for particle detectors and quantum computing.">
     <meta property="og:url" content="https://yashsaxena5.github.io/">
     <meta property="og:image" content="https://yashsaxena5.github.io/images/og-card.jpg">
     <meta property="og:image:width" content="1200">
@@ -21,10 +20,21 @@
     <meta property="profile:last_name" content="Saxena">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f4fd1'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3EYS%3C/text%3E%3C/svg%3E">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2322262b'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='27' font-weight='700' fill='%23fbfaf7' text-anchor='middle'%3EYS%3C/text%3E%3C/svg%3E">
+    <link rel="preload" href="fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        // Apply the saved or system theme before first paint.
+        (() => {
+            let saved;
+            try { saved = localStorage.getItem('yash-site-theme'); } catch {}
+            const theme = saved === 'light' || saved === 'dark' ? saved : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.dataset.theme = theme;
+            document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#17191d' : '#fbfaf7';
+        })();
+    </script>
 
     <script type="application/ld+json">
     {
@@ -42,545 +52,209 @@
             { "@type": "CollegeOrUniversity", "name": "Kamla Nehru Institute of Technology, Sultanpur" }
         ],
         "award": "Fermilab Technical Excellence Award (2025)",
-        "knowsAbout": ["ASIC design", "SystemVerilog", "UVM", "Design verification", "Post-silicon validation", "Cryogenic electronics", "FPGA"],
-        "sameAs": ["https://www.linkedin.com/in/yashsaxena5/", "https://github.com/yashsaxena5"]
+        "knowsAbout": ["ASIC design", "Design verification", "UVM", "SystemVerilog", "Post-silicon validation", "Cryogenic electronics", "FPGA"],
+        "sameAs": ["https://www.linkedin.com/in/yashsaxena5/", "https://github.com/yashsaxena5", "https://discreteindia.blogspot.com/"]
     }
     </script>
-
-    <style>
-        :root {
-            --bg: #faf9f6;
-            --surface: #ffffff;
-            --text: #171a1f;
-            --muted: #5a626d;
-            --faint: #8a919a;
-            --line: #e6e3dc;
-            --accent: #1f4fd1;
-            --accent-ink: #ffffff;
-            --accent-soft: #eaf0ff;
-            --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-            --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --radius: 12px;
-            --wrap: 880px;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #111418;
-                --surface: #181c21;
-                --text: #e8eaed;
-                --muted: #a3abb5;
-                --faint: #7b838d;
-                --line: #2a2f36;
-                --accent: #8aaeff;
-                --accent-ink: #0d1117;
-                --accent-soft: #1b2436;
-            }
-        }
-
-        *, *::before, *::after { box-sizing: border-box; }
-        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-        body {
-            margin: 0;
-            background: var(--bg);
-            color: var(--text);
-            font: 400 17px/1.65 var(--sans);
-            -webkit-font-smoothing: antialiased;
-        }
-        img { max-width: 100%; display: block; }
-        a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
-        a:hover { text-decoration-thickness: 2px; }
-        :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
-        h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.2; margin: 0; }
-        p { margin: 0 0 1em; }
-        ul { margin: 0; padding: 0; }
-
-        .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 20px; }
-        .skip { position: absolute; left: -999px; top: 8px; background: var(--accent); color: var(--accent-ink); padding: 8px 14px; border-radius: 8px; z-index: 100; }
-        .skip:focus { left: 8px; }
-
-        /* ── Top bar ─────────────────────────────── */
-        .topbar {
-            position: sticky; top: 0; z-index: 50;
-            background: color-mix(in srgb, var(--bg) 88%, transparent);
-            backdrop-filter: saturate(1.4) blur(10px);
-            -webkit-backdrop-filter: saturate(1.4) blur(10px);
-            border-bottom: 1px solid var(--line);
-        }
-        .topbar .wrap { display: flex; align-items: center; gap: 20px; height: 60px; }
-        .brand { font-family: var(--serif); font-weight: 600; font-size: 1.1rem; color: var(--text); text-decoration: none; white-space: nowrap; }
-        .topnav { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
-        .topnav::-webkit-scrollbar { display: none; }
-        .topnav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
-        .topnav a:hover { color: var(--text); background: var(--accent-soft); }
-        @media (max-width: 760px) { .topnav { display: none; } .topbar .btn { margin-left: auto; } }
-
-        /* ── Buttons ─────────────────────────────── */
-        .btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 10px 18px; border-radius: 999px;
-            font: 500 0.95rem/1.2 var(--sans);
-            text-decoration: none; cursor: pointer;
-            border: 1px solid var(--line); background: var(--surface); color: var(--text);
-            transition: transform .15s ease, background .15s ease, border-color .15s ease;
-        }
-        .btn:hover { border-color: var(--accent); transform: translateY(-1px); text-decoration: none; }
-        .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-        .btn-primary:hover { filter: brightness(1.08); }
-        .btn-sm { padding: 7px 14px; font-size: 0.88rem; }
-        .btn svg { width: 17px; height: 17px; flex: none; }
-        @media (prefers-reduced-motion: reduce) { .btn, .btn:hover { transition: none; transform: none; } }
-
-        /* ── Hero ────────────────────────────────── */
-        .hero { padding: 64px 0 40px; }
-        .hero-grid { display: grid; grid-template-columns: 168px 1fr; gap: 36px; align-items: center; }
-        .portrait { width: 168px; height: 168px; border-radius: 50%; object-fit: cover; border: 4px solid var(--surface); box-shadow: 0 6px 28px rgba(0,0,0,.12); }
-        .hero h1 { font-size: clamp(2.3rem, 5.5vw, 3.2rem); letter-spacing: -0.01em; }
-        .role { font-size: 1.12rem; color: var(--text); margin: 6px 0 2px; font-weight: 500; }
-        .role a { color: inherit; }
-        .where { color: var(--muted); font-size: 0.95rem; margin: 0; }
-        .lede { font-size: 1.15rem; color: var(--text); margin: 26px 0 26px; max-width: 46em; }
-        .cta { display: flex; flex-wrap: wrap; gap: 10px; }
-        @media (max-width: 640px) {
-            .hero { padding-top: 40px; }
-            .hero-grid { grid-template-columns: 1fr; gap: 20px; }
-            .portrait { width: 120px; height: 120px; }
-            .cta .btn { flex: 1 1 auto; justify-content: center; }
-        }
-
-        /* ── Highlights ──────────────────────────── */
-        .stats {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-            background: var(--line); border: 1px solid var(--line); border-radius: var(--radius);
-            overflow: hidden; margin: 8px 0 0;
-        }
-        .stat { background: var(--surface); padding: 18px 18px 16px; }
-        .stat b { display: block; font-family: var(--serif); font-size: 1.6rem; font-weight: 600; line-height: 1.15; color: var(--text); }
-        .stat span { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
-        @media (max-width: 760px) { .stats { grid-template-columns: repeat(2, 1fr); } }
-
-        /* ── Sections ────────────────────────────── */
-        section { padding: 56px 0 8px; scroll-margin-top: 64px; }
-        .eyebrow { font: 600 0.75rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
-        section > .wrap > h2 { font-size: clamp(1.6rem, 3.4vw, 2rem); margin-bottom: 24px; }
-        .muted { color: var(--muted); }
-
-        /* Story */
-        .chapter { display: grid; grid-template-columns: 150px 1fr; gap: 28px; padding: 22px 0; border-top: 1px solid var(--line); }
-        .chapter:first-of-type { border-top: 0; padding-top: 0; }
-        .chapter-when { font-size: 0.85rem; color: var(--muted); line-height: 1.5; padding-top: 3px; }
-        .chapter-when strong { display: block; color: var(--text); font-weight: 600; font-size: 0.95rem; }
-        .chapter h3 { font-size: 1.25rem; margin-bottom: 10px; }
-        .chapter p:last-child { margin-bottom: 0; }
-        @media (max-width: 640px) { .chapter { grid-template-columns: 1fr; gap: 6px; } }
-
-        /* Experience */
-        .job { padding: 24px 0; border-top: 1px solid var(--line); }
-        .job:first-of-type { border-top: 0; padding-top: 0; }
-        .job-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 16px; align-items: baseline; margin-bottom: 10px; }
-        .job-head h3 { font-size: 1.25rem; }
-        .job-org { color: var(--muted); }
-        .job-when { font-size: 0.9rem; color: var(--muted); white-space: nowrap; }
-        .bullets { list-style: none; }
-        .bullets li { position: relative; padding-left: 20px; margin: 7px 0; }
-        .bullets li::before { content: ""; position: absolute; left: 3px; top: .72em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-
-        /* Projects */
-        .group-title { font: 600 0.8rem/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 30px 0 14px; }
-        .group-title:first-of-type { margin-top: 0; }
-        .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-        @media (max-width: 700px) { .cards { grid-template-columns: 1fr; } }
-        .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 20px 18px; display: flex; flex-direction: column; }
-        .card h3 { font-size: 1.12rem; margin-bottom: 4px; }
-        .card .kicker { font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; }
-        .card p { font-size: 0.95rem; color: var(--text); margin-bottom: 12px; }
-        .card .tags { margin-top: auto; display: flex; flex-wrap: wrap; gap: 6px; }
-        .card .more { font-size: 0.9rem; font-weight: 500; margin-top: 12px; }
-        .tag { font-size: 0.76rem; padding: 3px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--text); }
-
-        /* Publications */
-        .pubs { list-style: none; counter-reset: pub; }
-        .pubs li { display: grid; grid-template-columns: 64px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line); }
-        .pubs li:first-child { border-top: 0; padding-top: 0; }
-        .pub-year { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; color: var(--muted); }
-        .pub-title { font-weight: 600; display: block; margin-bottom: 2px; }
-        .pub-meta { font-size: 0.92rem; color: var(--muted); }
-
-        /* Recognition */
-        .awards { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-        @media (max-width: 700px) { .awards { grid-template-columns: 1fr; } }
-        .awards li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; }
-        .awards strong { display: block; }
-        .awards span { font-size: 0.92rem; color: var(--muted); }
-
-        /* Skills */
-        .skills { display: grid; grid-template-columns: 210px 1fr; gap: 0; margin: 0; }
-        .skills dt, .skills dd { padding: 12px 0; border-top: 1px solid var(--line); margin: 0; }
-        .skills dt:first-of-type, .skills dd:first-of-type { border-top: 0; padding-top: 0; }
-        .skills dt { font-weight: 600; padding-right: 16px; }
-        .skills dd { color: var(--text); }
-        @media (max-width: 640px) {
-            .skills { grid-template-columns: 1fr; }
-            .skills dd { border-top: 0; padding-top: 0; }
-        }
-
-        /* Education */
-        .edu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-        @media (max-width: 700px) { .edu { grid-template-columns: 1fr; } }
-        .edu .card h3 { margin-bottom: 2px; }
-        .edu .card p { margin: 10px 0 0; font-size: 0.93rem; color: var(--muted); }
-
-        /* Contact */
-        .contact {
-            margin: 64px 0 0; padding: 40px 32px; border-radius: 18px;
-            background: var(--surface); border: 1px solid var(--line); text-align: center;
-        }
-        .contact h2 { font-size: clamp(1.7rem, 4vw, 2.2rem); margin-bottom: 10px; }
-        .contact p { color: var(--muted); max-width: 34em; margin: 0 auto 24px; }
-        .contact .cta { justify-content: center; }
-        .email-line { margin-top: 18px; font-size: 0.95rem; color: var(--muted); }
-        .copy { background: none; border: 0; color: var(--accent); font: inherit; cursor: pointer; padding: 0 0 0 6px; text-decoration: underline; text-underline-offset: 3px; }
-        @media (max-width: 640px) { .contact { padding: 30px 20px; } }
-
-        footer { padding: 36px 0 48px; color: var(--faint); font-size: 0.88rem; }
-        footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
-
-        @media print {
-            :root { --bg: #fff; --surface: #fff; --text: #000; --muted: #444; --line: #ccc; --accent: #000; --accent-soft: #eee; }
-            .topbar, .skip, .cta, .contact .cta, .copy { display: none !important; }
-            body { font-size: 11pt; }
-            section { padding-top: 20px; break-inside: avoid-page; }
-            .card, .awards li { break-inside: avoid; }
-            a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; word-break: break-all; }
-        }
-    </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="topbar">
+<header class="site-header">
     <div class="wrap">
-        <a class="brand" href="#top">Yash Saxena</a>
-        <nav class="topnav" aria-label="Sections">
-            <a href="#story">Story</a>
-            <a href="#experience">Experience</a>
-            <a href="#projects">Projects</a>
+        <a class="site-name" href="#about">Yash Saxena</a>
+        <nav class="site-nav" aria-label="Main">
+            <a href="#about">About</a>
+            <a href="#work">Work</a>
             <a href="#publications">Publications</a>
-            <a href="#skills">Skills</a>
-            <a href="#education">Education</a>
+            <a href="#writing">Writing</a>
+            <a href="Yash_Saxena_Resume.pdf">CV</a>
         </nav>
-        <a class="btn btn-primary btn-sm" href="#contact">Contact</a>
+        <button class="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.7 13.3A9 9 0 0 1 10.7 3.3a9 9 0 1 0 10 10Z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
     </div>
 </header>
 
-<main id="main">
+<main id="main" class="wrap">
 
-    <!-- ── Hero ─────────────────────────────────────────── -->
-    <div class="hero" id="top">
-        <div class="wrap">
-            <div class="hero-grid">
-                <picture>
-                    <source srcset="images/yash-saxena.webp" type="image/webp">
-                    <img class="portrait" src="images/yash-saxena.jpg" width="168" height="168" alt="Portrait of Yash Saxena">
-                </picture>
-                <div>
-                    <h1>Yash Saxena</h1>
-                    <p class="role">ASIC Engineer at <a href="https://www.fnal.gov/" rel="noopener">Fermilab</a></p>
-                    <p class="where">Batavia, Illinois · Chicago area</p>
-                </div>
-            </div>
+    <!-- About -->
+    <div class="intro" id="about">
+        <div class="intro-head">
+            <h1>Yash Saxena</h1>
+            <p class="subtitle">ASIC Engineer · Fermilab · Batavia, Illinois</p>
+            <p class="contact-line">
+                <a href="mailto:yash.saxena40@gmail.com">yash.saxena40@gmail.com</a> <span class="sep" aria-hidden="true">|</span> <a href="Yash_Saxena_Resume.pdf">CV (PDF)</a> <span class="sep" aria-hidden="true">|</span> <a href="https://www.linkedin.com/in/yashsaxena5/">LinkedIn</a> <span class="sep" aria-hidden="true">|</span> <a href="https://github.com/yashsaxena5">GitHub</a>
+            </p>
+        </div>
 
-            <p class="lede">I design, verify and bring up custom chips for cryogenic particle detectors and quantum computing. My work runs from SystemVerilog RTL and UVM testbenches to FPGA firmware and lab validation at 4&nbsp;K and 77&nbsp;K.</p>
+        <picture class="portrait">
+            <source srcset="images/portrait.webp" type="image/webp">
+            <img src="images/portrait.jpg" width="160" height="200" alt="Portrait of Yash Saxena" fetchpriority="high">
+        </picture>
 
-            <div class="cta">
-                <a class="btn btn-primary" href="mailto:yash.saxena40@gmail.com?subject=Hello%20Yash">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-                    Email me
-                </a>
-                <a class="btn" href="Yash_Saxena_Resume.pdf" download>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-                    Download résumé
-                </a>
-                <a class="btn" href="https://www.linkedin.com/in/yashsaxena5/" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
-                    LinkedIn
-                </a>
-            </div>
+        <div class="intro-body">
+            <p class="lede">I’m an ASIC engineer at <a href="https://www.fnal.gov/">Fermilab</a>. I make sure custom chips for particle detectors and quantum computers work: first in simulation, with SystemVerilog and UVM, and then on the bench, often inside a cryostat at 4&nbsp;K, where real silicon has a way of disagreeing with the simulator.</p>
+            <p>I studied electrical engineering at Kamla Nehru Institute of Technology in Sultanpur and learned most of it by building things. With funding from the college and the Government of Uttar Pradesh, I built ACUSPED, a quadcopter that could fly and also float on water. I also founded the institute’s Entrepreneurship Cell, which raised ₹25 lakh in 2017 and hosted two international conferences.</p>
+            <p>My first job took me to Kathmandu as an FPGA engineer, building real-time control hardware for solar trackers. In 2021 I came to Chicago for a fully funded master’s at the University of Illinois Chicago, where I did hardware-in-the-loop research in Prof. Sudip K. Mazumder’s LESES lab, worked with Prof. Amit Trivedi, and taught as a teaching assistant.</p>
+            <p>I joined Fermilab in 2023 and received its Technical Excellence Award in 2025. Outside work, I build <a href="cyphra/">Cyphra</a>, a desktop browser, and write at <a href="https://discreteindia.blogspot.com/">Discrete India</a>.</p>
         </div>
     </div>
 
-    <!-- ── Highlights ───────────────────────────────────── -->
-    <div class="wrap">
-        <div class="stats" role="list" aria-label="Highlights">
-            <div class="stat" role="listitem"><b>1.875 ps</b><span>RMS jitter after fixing PLL lock failures at 4&nbsp;K</span></div>
-            <div class="stat" role="listitem"><b>~80%</b><span>faster transistor characterization with Spacely</span></div>
-            <div class="stat" role="listitem"><b>3 months</b><span>saved on Quantinuum testing, which won a 2025 Technical Excellence Award</span></div>
-            <div class="stat" role="listitem"><b>4 papers</b><span>published with Fermilab, NASA, Caltech, Microsoft and IEEE</span></div>
-        </div>
-    </div>
+    <!-- Work -->
+    <section id="work">
+        <h2>Research &amp; Engineering</h2>
+        <p class="section-intro">My work sits between design and the lab. Before tape-out, I build verification environments that try hard to break the chip. After silicon comes back, I bring it up, characterize it and chase down whatever doesn’t match. Most of these chips run at cryogenic temperatures for detectors and quantum systems, built with collaborators at NASA, Caltech, MIT, CERN and Microsoft.</p>
 
-    <!-- ── Story ────────────────────────────────────────── -->
-    <section id="story">
-        <div class="wrap">
-            <p class="eyebrow">My story</p>
-            <h2>From an amphibious quadcopter to cryogenic silicon</h2>
+        <article class="entry">
+            <h3>SUNROCK: a 32-channel cryogenic readout ASIC</h3>
+            <p class="meta">RTL design · UVM verification · FPGA bring-up</p>
+            <p>I designed the digital readout in SystemVerilog: fine-delay TDCs with bubble-error filtering, multi-channel priority arbiters and high-speed CML serializers. The configuration registers use triple modular redundancy with live SEU counters, and slow control runs over a custom GPPI link and an I²C-to-Wishbone bridge. I verified the blocks with UVM in Fermilab’s Songbird framework, then led system-level testing on a Zynq UltraScale+ (ZCU102) board with PetaLinux and AXI firmware, correlating silicon against Cocotb and Xcelium simulations.</p>
+            <p class="related">Related paper: <a href="#paper-snspd">32-channel cryo-CMOS ASIC for SNSPD readout</a></p>
+        </article>
 
-            <div class="chapter">
-                <div class="chapter-when"><strong>2015 – 2019</strong>Sultanpur, India</div>
-                <div>
-                    <h3>Learning by building</h3>
-                    <p>I earned my B.Tech in Electrical Engineering at Kamla Nehru Institute of Technology, Sultanpur, and spent most of those years building things. My biggest project was <strong>ACUSPED</strong>, the <em>Amphibious Copter, Underwater Submersible Propelling Engineered Device</em>: a quadcopter that could fly through the air and float on water. The college and the Government of Uttar Pradesh funded the whole project.</p>
-                    <p>I also founded the institute's <strong>Entrepreneurship Cell</strong>. In 2017 it secured ₹25,00,000 (₹25 lakh) in funding, and we went on to organise two international conferences.</p>
-                </div>
-            </div>
+        <article class="entry">
+            <h3>Bringing a cryogenic PLL back to lock</h3>
+            <p class="meta">Silicon debug · phase-noise measurement</p>
+            <p>On silicon at 4&nbsp;K, the PLL would not lock. Working through VCO and loop analysis, I retuned the VCO sub-bands and loop parameters until it locked stably, with 1.875&nbsp;ps RMS jitter.</p>
+            <p class="related">Related paper: <a href="#paper-pll">A 10 GHz low-jitter cryogenic PLL for quantum applications</a></p>
+        </article>
 
-            <div class="chapter">
-                <div class="chapter-when"><strong>2019 – 2021</strong>Kathmandu, Nepal</div>
-                <div>
-                    <h3>My first FPGA job</h3>
-                    <p>As an FPGA Engineer at Hospo Tech Nepal (Hotel Yak &amp; Yeti), I built real-time FPGA control systems for autonomous solar tracking. I designed a custom system-on-programmable-chip on an Altera Cyclone II, with a Nios II/f soft-core processor on the Avalon-MM fabric. I also wrote Verilog and VHDL IP cores for fuzzy-logic control and stepper-motor sequencing. Moving that maths from software into hardware cut control-loop latency by 40%.</p>
-                </div>
-            </div>
+        <article class="entry">
+            <h3>SPROCKET: SAR ADC readout for Skipper-CCD sensors</h3>
+            <p class="meta">Mixed-signal verification · cryogenic validation</p>
+            <p>I verified the chip for tape-out, then validated it on the bench down to 77&nbsp;K, correlating measured silicon with simulation so there were fewer surprises after fabrication.</p>
+            <p class="related">Related paper: <a href="#paper-sprocket">A cryogenic readout IC with 100 KSPS in-pixel ADC</a></p>
+        </article>
 
-            <div class="chapter">
-                <div class="chapter-when"><strong>2021 – 2023</strong>Chicago, Illinois</div>
-                <div>
-                    <h3>Graduate school in the U.S.</h3>
-                    <p>I moved to the United States for an M.S. in Electrical &amp; Computer Engineering at the University of Illinois Chicago. In Prof. Sudip K. Mazumder's LESES lab I worked on research papers and hardware-in-the-loop (HIL) systems. I also served as a teaching assistant, and a scholarship fully funded my degree. In my second year I worked with Prof. Amit Trivedi. I graduated in May 2023 with a 3.75 GPA.</p>
-                </div>
-            </div>
+        <article class="entry">
+            <h3>Spacely: open-source test automation</h3>
+            <p class="meta">Python · lab automation</p>
+            <p>A Python framework (1,000+ lines) for SMU and AWG instrument control, data acquisition and analysis. It made 28&nbsp;nm FDSOI transistor characterization about 80% faster and more repeatable.</p>
+            <p class="related">Code: <a href="https://github.com/SpacelyProject">github.com/SpacelyProject</a></p>
+        </article>
 
-            <div class="chapter">
-                <div class="chapter-when"><strong>2023 – today</strong>Batavia, Illinois</div>
-                <div>
-                    <h3>Chips for physics and quantum computing</h3>
-                    <p>In July 2023 I joined Fermilab, America's particle physics and accelerator laboratory, as an ASIC Engineer. I work across the whole life of a chip, from RTL and verification through FPGA firmware to bring-up inside a cryostat. Our collaborators include NASA, Caltech, MIT, CERN and Microsoft. In 2025 I received Fermilab's Technical Excellence Award for cutting three months off Quantinuum testing.</p>
-                </div>
-            </div>
-        </div>
+        <h3 class="subhead">Also at Fermilab</h3>
+        <ul class="plain-list">
+            <li>Verified a 1+ Gbps serializer/deserializer across PVT corners with constrained-random stimulus and SystemVerilog assertions.</li>
+            <li>Built UVM environments that reached 100% functional coverage and cut debug iterations by about 30%.</li>
+            <li>Automated Quantinuum chip testing with Python and GPIB, saving three months, which earned the 2025 Technical Excellence Award.</li>
+            <li>Validated a SQUID DAC at the register level from an Arduino Portenta, and characterized level shifters across voltage domains with AWG-driven signals.</li>
+            <li>Repaired and recalibrated the lab’s Lakeshore cryogenic temperature controller, avoiding about $80K in replacement cost.</li>
+        </ul>
     </section>
 
-    <!-- ── Experience ───────────────────────────────────── -->
-    <section id="experience">
-        <div class="wrap">
-            <p class="eyebrow">Experience</p>
-            <h2>Where I've worked</h2>
-
-            <article class="job">
-                <div class="job-head">
-                    <h3>ASIC Engineer <span class="job-org">· Fermilab, Batavia, IL</span></h3>
-                    <span class="job-when">Jul 2023 – Present</span>
-                </div>
-                <p class="muted">I lead verification and validation of custom ASICs and work toward first-silicon success on every chip.</p>
-                <ul class="bullets">
-                    <li>Built SystemVerilog RTL and full UVM environments (drivers, monitors, self-checking TLM scoreboards, constrained-random sequences) for ASIC subsystems. Reached <strong>100% functional coverage</strong> and cut debug iterations by about 30%.</li>
-                    <li>Verified a <strong>1+ Gbps serializer/deserializer</strong> across PVT corners with constrained-random stimulus and SystemVerilog assertions.</li>
-                    <li>Designed the digital readout for the <strong>32-channel SUNROCK</strong> cryogenic ASIC and led its system-level testing on a Zynq UltraScale+ (ZCU102) board.</li>
-                    <li>Root-caused PLL lock failures on silicon at 4&nbsp;K and restored stable lock with <strong>1.875 ps RMS jitter</strong>.</li>
-                    <li>Accelerated Quantinuum testing by <strong>3 months</strong> through Python/GPIB test automation and Verilog deliverables.</li>
-                    <li>Diagnosed and repaired the lab's Lakeshore cryogenic temperature controller, avoiding about <strong>$80K</strong> in replacement cost.</li>
-                </ul>
-            </article>
-
-            <article class="job">
-                <div class="job-head">
-                    <h3>FPGA Engineer <span class="job-org">· Hospo Tech Nepal Pvt. Ltd. (Hotel Yak &amp; Yeti), Kathmandu</span></h3>
-                    <span class="job-when">Jul 2019 – Apr 2021</span>
-                </div>
-                <ul class="bullets">
-                    <li>Engineered a custom SoPC on an <strong>Altera Cyclone II</strong> with a Nios II/f soft-core processor on the Avalon-MM fabric for autonomous solar tracking.</li>
-                    <li>Designed Verilog/VHDL IP cores for fuzzy-logic control and stepper-motor sequencing, cutting control-loop latency by <strong>40%</strong>.</li>
-                </ul>
-            </article>
-        </div>
-    </section>
-
-    <!-- ── Projects ─────────────────────────────────────── -->
-    <section id="projects">
-        <div class="wrap">
-            <p class="eyebrow">Projects</p>
-            <h2>Things I've built</h2>
-
-            <h3 class="group-title">At Fermilab</h3>
-            <div class="cards">
-                <article class="card">
-                    <h3>SUNROCK</h3>
-                    <div class="kicker">32-channel cryogenic readout ASIC</div>
-                    <p>Readout RTL in SystemVerilog with fine-delay TDCs and bubble-error filtering, multi-channel priority arbiters and high-speed CML serializers. Configuration registers use triple modular redundancy with live SEU counters. Slow control runs over a custom GPPI link and an I²C-to-Wishbone bridge. I verified it in UVM with Fermilab's Songbird framework, then brought it up on a ZCU102 (Caribou) board with PetaLinux and AXI firmware, matching silicon against Cocotb and Xcelium runs.</p>
-                    <div class="tags"><span class="tag">SystemVerilog</span><span class="tag">UVM</span><span class="tag">Cocotb</span><span class="tag">Zynq UltraScale+</span><span class="tag">TMR</span></div>
-                </article>
-                <article class="card">
-                    <h3>Cryogenic PLL bring-up</h3>
-                    <div class="kicker">Debug and characterization at 4&nbsp;K</div>
-                    <p>The PLL would not lock on silicon at 4&nbsp;K. I worked through VCO and loop analysis, retuned the VCO sub-bands and loop parameters, and restored stable lock with 1.875 ps RMS jitter, which brought the chip back to full function.</p>
-                    <div class="tags"><span class="tag">Phase-noise analysis</span><span class="tag">Cryogenic test</span><span class="tag">Root-cause debug</span></div>
-                </article>
-                <article class="card">
-                    <h3>SPROCKET</h3>
-                    <div class="kicker">SAR ADC readout for Skipper-CCD detectors</div>
-                    <p>Verified the chip for tape-out readiness, then validated it on the bench down to 77&nbsp;K and matched the silicon results to simulation, which reduced surprises after silicon came back.</p>
-                    <div class="tags"><span class="tag">Mixed-signal validation</span><span class="tag">77 K</span><span class="tag">UVM</span></div>
-                    <a class="more" href="https://ieeexplore.ieee.org/document/10182087" rel="noopener">Read the IEEE paper →</a>
-                </article>
-                <article class="card">
-                    <h3>Spacely</h3>
-                    <div class="kicker">Open-source Python test framework</div>
-                    <p>More than 1,000 lines of Python for automated SMU and AWG instrument control, data acquisition and analysis. It cut transistor characterization time by about 80% and made measurements more repeatable.</p>
-                    <div class="tags"><span class="tag">Python</span><span class="tag">Lab automation</span><span class="tag">Open source</span></div>
-                    <a class="more" href="https://github.com/SpacelyProject" rel="noopener">See it on GitHub →</a>
-                </article>
-                <article class="card">
-                    <h3>28 nm FDSOI device characterization</h3>
-                    <div class="kicker">Wafer-level transistor test infrastructure</div>
-                    <p>Built automated test setups with SMUs and DAQ systems to measure transistors across many geometries and LV, MV and HV voltage domains, which sped up design-space exploration across process splits.</p>
-                    <div class="tags"><span class="tag">SMU</span><span class="tag">DAQ</span><span class="tag">28 nm FDSOI</span></div>
-                </article>
-                <article class="card">
-                    <h3>SQUID DAC &amp; level shifters</h3>
-                    <div class="kicker">Interface and signal-integrity validation</div>
-                    <p>Verified a SQUID DAC through register-level tests driven from an Arduino Portenta. I also characterized voltage level shifters with AWG-driven signals, measuring switching thresholds, delay and signal integrity across voltage domains.</p>
-                    <div class="tags"><span class="tag">AWG</span><span class="tag">Oscilloscope</span><span class="tag">Register-level test</span></div>
-                </article>
-            </div>
-
-            <h3 class="group-title">Before Fermilab</h3>
-            <div class="cards">
-                <article class="card">
-                    <h3>FPGA solar tracker</h3>
-                    <div class="kicker">Hospo Tech Nepal · 2019 – 2021</div>
-                    <p>A real-time control system on an Altera Cyclone II: a Nios II/f soft core plus custom fuzzy-logic and stepper-motor IP in hardware, for 40% lower control-loop latency.</p>
-                    <div class="tags"><span class="tag">Verilog</span><span class="tag">VHDL</span><span class="tag">Nios II</span><span class="tag">Avalon-MM</span></div>
-                </article>
-                <article class="card">
-                    <h3>ACUSPED</h3>
-                    <div class="kicker">Amphibious quadcopter · B.Tech</div>
-                    <p>An Amphibious Copter, Underwater Submersible Propelling Engineered Device: a quadcopter that flies and floats on water. The college and the Government of Uttar Pradesh fully funded it.</p>
-                    <div class="tags"><span class="tag">Embedded systems</span><span class="tag">Robotics</span></div>
-                </article>
-            </div>
-
-            <h3 class="group-title">On the side</h3>
-            <div class="cards">
-                <article class="card">
-                    <h3>Cyphra Browser</h3>
-                    <div class="kicker">Desktop app for Windows and macOS</div>
-                    <p>A private desktop browser with split panes, voice navigation and local AI, which I build in my own time.</p>
-                    <div class="tags"><span class="tag">Qt</span><span class="tag">Chromium</span><span class="tag">Local AI</span></div>
-                    <a class="more" href="cyphra/">Visit the Cyphra page →</a>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- ── Publications ─────────────────────────────────── -->
+    <!-- Publications -->
     <section id="publications">
-        <div class="wrap">
-            <p class="eyebrow">Publications</p>
-            <h2>Selected papers</h2>
-            <ol class="pubs">
-                <li>
-                    <span class="pub-year">2025</span>
-                    <div>
-                        <a class="pub-title" href="https://www.researchgate.net/publication/385948953_A_32-Channel_Cryo-CMOS_ASIC_for_SNSPD_Biasing_and_Readout_with_Picosecond_Timing" rel="noopener">A 32-Channel Cryo-CMOS ASIC for SNSPD Biasing and Readout with Picosecond Timing</a>
-                        <span class="pub-meta">Fermilab, NASA, Caltech · ResearchGate</span>
-                    </div>
-                </li>
-                <li>
-                    <span class="pub-year">2024</span>
-                    <div>
-                        <a class="pub-title" href="https://www.researchgate.net/publication/387228682_A_10GHz_Low-Jitter_Cryogenic_Phase-Locked_Loop_PLL_For_Quantum_Applications" rel="noopener">A 10 GHz Low-Jitter Cryogenic Phase-Locked Loop (PLL) for Quantum Applications</a>
-                        <span class="pub-meta">Fermilab, Microsoft · ResearchGate</span>
-                    </div>
-                </li>
-                <li>
-                    <span class="pub-year">2023</span>
-                    <div>
-                        <a class="pub-title" href="https://ieeexplore.ieee.org/document/10182087" rel="noopener">SPROCKET: Cryogenic 100 KSPS Skipper-CCD Readout IC</a>
-                        <span class="pub-meta">IEEE Transactions on Nuclear Science · IEEE Xplore</span>
-                    </div>
-                </li>
-                <li>
-                    <span class="pub-year">2022</span>
-                    <div>
-                        <a class="pub-title" href="https://ieeexplore.ieee.org/document/10089925" rel="noopener">Unifying PUF &amp; TRNG over a SAR-ADC</a>
-                        <span class="pub-meta">IEEE ISCAS · IEEE Xplore</span>
-                    </div>
-                </li>
-            </ol>
-        </div>
-    </section>
+        <h2>Publications</h2>
 
-    <!-- ── Recognition ──────────────────────────────────── -->
-    <section id="recognition">
-        <div class="wrap">
-            <p class="eyebrow">Recognition</p>
-            <h2>Awards and funding</h2>
-            <ul class="awards">
-                <li><strong>Fermilab Technical Excellence Award</strong><span>2025 · For cutting three months off Quantinuum testing</span></li>
-                <li><strong>Fully funded M.S. degree</strong><span>2021 – 2023 · Scholarship at the University of Illinois Chicago</span></li>
-                <li><strong>₹25 lakh for the Entrepreneurship Cell</strong><span>2017 · Funding secured for the cell I founded at KNIT Sultanpur</span></li>
-                <li><strong>Government-funded ACUSPED project</strong><span>B.Tech · Funded by the college and the Government of Uttar Pradesh</span></li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- ── Skills ───────────────────────────────────────── -->
-    <section id="skills">
-        <div class="wrap">
-            <p class="eyebrow">Skills</p>
-            <h2>What I work with</h2>
-            <dl class="skills">
-                <dt>Design &amp; verification</dt>
-                <dd>RTL architecture, UVM, constrained-random verification, SystemVerilog assertions (SVA), functional coverage, DFT (scan, MBIST), STA and timing, TMR / SEU mitigation</dd>
-                <dt>Post-silicon &amp; lab</dt>
-                <dd>Bench-level hardware validation, cryogenic test (4&nbsp;K / 77&nbsp;K), spectrum and phase-noise analyzers, oscilloscopes, AWGs, SMUs, DAQ, GPIB automation, power testing and optimization</dd>
-                <dt>Languages</dt>
-                <dd>SystemVerilog, Verilog, VHDL, Python, C/C++, Tcl</dd>
-                <dt>EDA &amp; tools</dt>
-                <dd>Cadence Xcelium (xrun), Cocotb, Xilinx Vivado, ModelSim, PetaLinux, MATLAB, Git</dd>
-                <dt>FPGA platforms</dt>
-                <dd>Zynq UltraScale+ (ZCU102), Altera Cyclone II with Nios II</dd>
-                <dt>Protocols &amp; interfaces</dt>
-                <dd>AXI4, Wishbone, Avalon-MM, I²C, SPI, SFP+ optical link</dd>
-            </dl>
-        </div>
-    </section>
-
-    <!-- ── Education ────────────────────────────────────── -->
-    <section id="education">
-        <div class="wrap">
-            <p class="eyebrow">Education</p>
-            <h2>Where I studied</h2>
-            <div class="edu">
-                <article class="card">
-                    <h3>University of Illinois Chicago</h3>
-                    <div class="kicker">M.S. in Electrical &amp; Computer Engineering · GPA 3.75 / 4.0 · Aug 2021 – May 2023</div>
-                    <p>Research in Prof. Sudip K. Mazumder's LESES lab (hardware-in-the-loop), and later with Prof. Amit Trivedi. Teaching assistant. Fully funded by a scholarship.</p>
-                </article>
-                <article class="card">
-                    <h3>Kamla Nehru Institute of Technology</h3>
-                    <div class="kicker">B.Tech in Electrical Engineering · GPA 8.4 / 10 · Aug 2015 – May 2019 · Sultanpur, India</div>
-                    <p>Built the ACUSPED amphibious quadcopter. Founded the Entrepreneurship Cell, which raised ₹25 lakh and hosted two international conferences.</p>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- ── Contact ──────────────────────────────────────── -->
-    <section id="contact">
-        <div class="wrap">
-            <div class="contact">
-                <h2>Let's talk</h2>
-                <p>I'm always happy to hear about ASIC design, design verification and post-silicon validation work. Email is the fastest way to reach me.</p>
-                <div class="cta">
-                    <a class="btn btn-primary" href="mailto:yash.saxena40@gmail.com?subject=Hello%20Yash">Email me</a>
-                    <a class="btn" href="Yash_Saxena_Resume.pdf" download>Download résumé</a>
-                    <a class="btn" href="https://www.linkedin.com/in/yashsaxena5/" rel="noopener">LinkedIn</a>
-                    <a class="btn" href="https://github.com/yashsaxena5" rel="noopener">GitHub</a>
+        <ol class="papers">
+            <li id="paper-pll">
+                <span class="year">2024</span>
+                <div>
+                    <a class="title" href="https://www.osti.gov/biblio/2482064">A 10 GHz Low-Jitter Cryogenic Phase-Locked Loop (PLL) for Quantum Applications</a>
+                    <p class="authors">X. Wang, D. Braga, T. England, K. Das, N. Dick, F. Fahim, S. Holm, A. Moini, F. Nolet, P. Rubinov, L. Sanderson, <strong>Y. Saxena</strong></p>
+                    <p class="venue">Conference paper, Fermilab · OSTI</p>
                 </div>
-                <p class="email-line">yash.saxena40@gmail.com<button class="copy" type="button" data-copy="yash.saxena40@gmail.com" hidden>Copy</button></p>
+            </li>
+        </ol>
+
+        <h3 class="subhead">Papers I contributed to</h3>
+        <ol class="papers">
+            <li id="paper-snspd">
+                <span class="year">2024</span>
+                <div>
+                    <a class="title" href="https://doi.org/10.1109/NSS/MIC/RTSD57108.2024.10654871">A 32-Channel Cryo-CMOS ASIC for SNSPD Biasing and Readout with Picosecond Timing</a>
+                    <p class="venue">IEEE NSS/MIC/RTSD 2024</p>
+                    <p class="role"><span>My role:</span> digital readout RTL, UVM verification and system-level testing on a ZCU102 board.</p>
+                </div>
+            </li>
+            <li id="paper-sprocket">
+                <span class="year">2023</span>
+                <div>
+                    <a class="title" href="https://ieeexplore.ieee.org/document/10182087">A Cryogenic Readout IC with 100 KSPS in-Pixel ADC for Skipper CCD-in-CMOS Sensors</a>
+                    <p class="venue">IEEE ISCAS 2023</p>
+                    <p class="role"><span>My role:</span> tape-out verification and bench validation of the chip (SPROCKET) down to 77&nbsp;K.</p>
+                </div>
+            </li>
+            <li id="paper-puf">
+                <span class="year">2023</span>
+                <div>
+                    <a class="title" href="https://ieeexplore.ieee.org/document/10089925">Unifying Intrinsically-Operated Physically Unclonable Function and Random Number Generation in Analog Circuits: A Case Study on Successive Approximation ADC</a>
+                    <p class="venue">VLSID 2023</p>
+                    <p class="role"><span>My role:</span> contributed during my M.S. research with Prof. Amit Trivedi at UIC.</p>
+                </div>
+            </li>
+        </ol>
+    </section>
+
+    <!-- Background -->
+    <section id="background">
+        <h2>Background</h2>
+
+        <h3 class="subhead">Experience</h3>
+        <div class="record">
+            <div>
+                <h3>ASIC Engineer, Fermilab</h3>
+                <span class="where">Batavia, Illinois</span>
             </div>
+            <span class="when">Jul 2023 – present</span>
+            <p>Verification, validation and bring-up of custom cryogenic ASICs, from UVM testbenches to bench and cryostat testing. Technical Excellence Award, 2025.</p>
         </div>
+        <div class="record">
+            <div>
+                <h3>FPGA Engineer, Hospo Tech Nepal (Hotel Yak &amp; Yeti)</h3>
+                <span class="where">Kathmandu, Nepal</span>
+            </div>
+            <span class="when">Jul 2019 – Apr 2021</span>
+            <p>Real-time FPGA control for autonomous solar tracking: a custom SoPC on an Altera Cyclone II with a Nios II/f soft core, plus Verilog/VHDL IP for fuzzy-logic control and stepper-motor sequencing that cut control-loop latency by 40%.</p>
+        </div>
+
+        <h3 class="subhead">Education</h3>
+        <div class="record">
+            <div>
+                <h3>M.S., Electrical &amp; Computer Engineering</h3>
+                <span class="where">University of Illinois Chicago</span>
+            </div>
+            <span class="when">2021 – 2023</span>
+            <p>GPA 3.75 / 4.0, fully funded. Research in the LESES lab (Prof. Sudip K. Mazumder) and with Prof. Amit Trivedi; teaching assistant.</p>
+        </div>
+        <div class="record">
+            <div>
+                <h3>B.Tech, Electrical Engineering</h3>
+                <span class="where">Kamla Nehru Institute of Technology, Sultanpur</span>
+            </div>
+            <span class="when">2015 – 2019</span>
+            <p>GPA 8.4 / 10. Built the ACUSPED amphibious quadcopter and founded the Entrepreneurship Cell.</p>
+        </div>
+
+        <h3 class="subhead">Tools &amp; methods</h3>
+        <dl class="tools">
+            <dt>Design &amp; verification</dt>
+            <dd>SystemVerilog, Verilog, VHDL, UVM, constrained-random verification, SVA, functional coverage, DFT (scan, MBIST), STA, TMR / SEU mitigation</dd>
+            <dt>Lab &amp; post-silicon</dt>
+            <dd>Cryogenic testing (4&nbsp;K / 77&nbsp;K), spectrum and phase-noise analyzers, oscilloscopes, AWGs, SMUs, DAQ, GPIB automation, power testing</dd>
+            <dt>Software &amp; EDA</dt>
+            <dd>Python, C/C++, Tcl, Cadence Xcelium, Cocotb, Vivado, ModelSim, PetaLinux, MATLAB, Git</dd>
+            <dt>Platforms &amp; interfaces</dt>
+            <dd>Zynq UltraScale+ (ZCU102), Altera Cyclone II / Nios II, AXI4, Wishbone, Avalon-MM, I²C, SPI, SFP+</dd>
+        </dl>
+    </section>
+
+    <!-- Elsewhere -->
+    <section id="elsewhere">
+        <h2>Elsewhere</h2>
+        <dl class="elsewhere">
+            <dt id="writing">Writing</dt>
+            <dd><a href="https://discreteindia.blogspot.com/">Discrete India</a>, a place for my thoughts, ideas and things I’m learning.</dd>
+            <dt>Software</dt>
+            <dd><a href="cyphra/">Cyphra</a>, a private desktop browser with split panes, voice navigation and local AI that I build in my own time.</dd>
+            <dt>Code</dt>
+            <dd><a href="https://github.com/yashsaxena5">GitHub</a> and the <a href="https://github.com/SpacelyProject">Spacely Project</a>.</dd>
+            <dt>Contact</dt>
+            <dd>I’m always glad to hear about ASIC design, design verification and post-silicon validation work. Email <a href="mailto:yash.saxena40@gmail.com">yash.saxena40@gmail.com</a>, or find me on <a href="https://www.linkedin.com/in/yashsaxena5/">LinkedIn</a>. My <a href="Yash_Saxena_Resume.pdf">CV</a> has the full details.</dd>
+        </dl>
     </section>
 
 </main>
@@ -588,22 +262,40 @@
 <footer>
     <div class="wrap">
         <span>© 2026 Yash Saxena</span>
-        <span>Batavia, Illinois</span>
+        <span>Last updated October 2026</span>
     </div>
 </footer>
 
 <script>
-    // Show the copy button only where the Clipboard API is available.
-    document.querySelectorAll('.copy').forEach(btn => {
-        if (!navigator.clipboard) return;
-        btn.hidden = false;
-        btn.addEventListener('click', () => {
-            navigator.clipboard.writeText(btn.dataset.copy).then(() => {
-                btn.textContent = 'Copied';
-                setTimeout(() => { btn.textContent = 'Copy'; }, 1800);
-            });
-        });
+    // Open external links in a new tab and say so to screen readers.
+    document.querySelectorAll('a[href^="http"]').forEach(link => {
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.insertAdjacentHTML('beforeend', '<span class="sr-only"> (opens in a new tab)</span>');
     });
+
+    // Theme toggle; follows the system setting until the visitor picks one.
+    (() => {
+        const toggle = document.querySelector('.theme-toggle');
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        let saved;
+        try { saved = localStorage.getItem('yash-site-theme'); } catch {}
+        const apply = theme => {
+            document.documentElement.dataset.theme = theme;
+            toggle.setAttribute('aria-pressed', String(theme === 'dark'));
+            themeColor.content = theme === 'dark' ? '#17191d' : '#fbfaf7';
+        };
+        apply(document.documentElement.dataset.theme);
+        toggle.hidden = false;
+        toggle.addEventListener('click', () => {
+            saved = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            apply(saved);
+            try { localStorage.setItem('yash-site-theme', saved); } catch {}
+        });
+        matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (saved !== 'light' && saved !== 'dark') apply(event.matches ? 'dark' : 'light');
+        });
+    })();
 </script>
 </body>
 </html>

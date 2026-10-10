@@ -108,10 +108,10 @@
         <p class="section-intro">My work sits between design and the lab. Before tape-out, I build verification environments that try hard to break the chip. After silicon comes back, I bring it up, characterize it and chase down whatever doesn’t match. Most of these chips run at cryogenic temperatures for detectors and quantum systems, built with collaborators at NASA, Caltech, MIT, CERN and Microsoft.</p>
 
         <article class="entry">
-            <h3>SUNROCK: a 32-channel cryogenic readout ASIC</h3>
+            <h3>SUNROC: a 32-channel cryogenic readout ASIC for SNSPD arrays</h3>
             <p class="meta">RTL design · UVM verification · FPGA bring-up</p>
-            <p>I designed the digital readout in SystemVerilog: fine-delay TDCs with bubble-error filtering, multi-channel priority arbiters and high-speed CML serializers. The configuration registers use triple modular redundancy with live SEU counters, and slow control runs over a custom GPPI link and an I²C-to-Wishbone bridge. I verified the blocks with UVM in Fermilab’s Songbird framework, then led system-level testing on a Zynq UltraScale+ (ZCU102) board with PetaLinux and AXI firmware, correlating silicon against Cocotb and Xcelium simulations.</p>
-            <p class="related">Related paper: <a href="#paper-snspd">32-channel cryo-CMOS ASIC for SNSPD readout</a></p>
+            <p>SUNROC reads out arrays of superconducting nanowire single-photon detectors at 4&nbsp;K, with 32 readout channels, four 1&nbsp;Gbps SerDes links and a 10&nbsp;GHz PLL. I designed its digital readout in SystemVerilog: fine-delay TDCs with bubble-error filtering, multi-channel priority arbiters and high-speed CML serializers. The configuration registers use triple modular redundancy with live SEU counters, and slow control runs over a custom GPPI link and an I²C-to-Wishbone bridge. I verified the blocks with UVM in Fermilab’s Songbird framework, then led system-level testing on a Zynq UltraScale+ (ZCU102) board with PetaLinux and AXI firmware, correlating silicon against Cocotb and Xcelium simulations.</p>
+            <p class="related">Related: <a href="#paper-snspd">IEEE NSS/MIC 2024 paper</a> and <a href="#talk-twepp">TWEPP 2025 talk</a></p>
         </article>
 
         <article class="entry">
@@ -160,8 +160,16 @@
             </li>
         </ol>
 
-        <h3 class="subhead">Papers I contributed to</h3>
+        <h3 class="subhead">Papers and talks I contributed to</h3>
         <ol class="papers">
+            <li id="talk-twepp">
+                <span class="year">2025</span>
+                <div>
+                    <a class="title" href="https://indico.cern.ch/event/1502285/contributions/6554390/attachments/3081261/5592579/TWEPP_2025_Crete_SUNROC.pdf">A 32-Channel Cryo-CMOS Readout ASIC for SNSPD Arrays with Sub-10 ps Timing</a>
+                    <p class="venue">Talk by D. Braga, TWEPP 2025, Crete · slides on CERN Indico</p>
+                    <p class="role"><span>My role:</span> SUNROC digital readout, verification and testing; credited on the project team in the talk.</p>
+                </div>
+            </li>
             <li id="paper-snspd">
                 <span class="year">2024</span>
                 <div>
